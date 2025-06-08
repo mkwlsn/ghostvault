@@ -7,3 +7,6 @@
 
 ## processed
 - 2025-06-07 initialized ghostvault
+- [ ] 📡 ghost gen prompt
+- [ ] investigate fragment interference 🌫️
+- [ ] refine lobotomizr interop model 🧷
