@@ -4,6 +4,8 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+import subprocess
+
 VAULT = Path.home() / "ghostvault"
 
 def log_event(msg):
@@ -53,6 +55,19 @@ def log_ritual(summary):
         f.write(f"- {summary}\n")
     print(f"📿 ritual logged for {date_str}")
 
+def ghost_push(custom_msg=None):
+    try:
+        subprocess.run(["git", "add", "."], cwd=VAULT, check=True)
+
+        msg = custom_msg or f"🧠 ghost update — {datetime.today().date()}"
+        subprocess.run(["git", "commit", "-m", msg], cwd=VAULT, check=True)
+
+        subprocess.run(["git", "push"], cwd=VAULT, check=True)
+        print("🚀 ghost pushed")
+    except subprocess.CalledProcessError:
+        print("❗ git push failed — check status manually")
+
+
 def show_help():
     print("""ghost.py — local ghost CLI
 
@@ -78,6 +93,11 @@ if __name__ == "__main__":
         queue_task(" ".join(args[1:]))
     elif cmd == "ritual":
         log_ritual(" ".join(args[1:]))
+    elif cmd == "push":
+        custom_msg = None
+        if len(args) > 1 and args[1] == "--message":
+            custom_msg = " ".join(args[2:])
+        ghost_push(custom_msg)
     else:
         show_help()
 
