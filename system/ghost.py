@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 import subprocess
+import os
 
 VAULT = Path.home() / "ghostvault"
 
@@ -67,6 +68,44 @@ def ghost_push(custom_msg=None):
     except subprocess.CalledProcessError:
         print("❗ git push failed — check status manually")
 
+def ghost_status():
+    print("🔍 ghost status report\n")
+
+    # git status
+    try:
+        print("🌀 git:")
+        subprocess.run(["git", "status", "-s"], cwd=VAULT, check=True)
+        subprocess.run(["git", "branch", "--show-current"], cwd=VAULT, check=True)
+    except subprocess.CalledProcessError:
+        print("❗ git error")
+
+    print("\n📋 queue:")
+    queue_path = VAULT / "system" / "ghost-queue.md"
+    if queue_path.exists():
+        with open(queue_path) as f:
+            lines = [line.strip() for line in f if line.startswith("- [ ]")]
+            if lines:
+                for line in lines:
+                    print("•", line[6:].strip())
+            else:
+                print("✓ no pending tasks")
+    else:
+        print("⚠️ ghost-queue.md not found")
+
+    print("\n🔁 last ritual:")
+    ritual_dir = VAULT / "rituals"
+    ritual_files = sorted(ritual_dir.glob("daily-log-*.md"), reverse=True)
+    if ritual_files:
+        last = ritual_files[0]
+        print(f"🗓️ {last.name}")
+        with last.open() as f:
+            for line in f:
+                if line.startswith("- "):
+                    print("•", line.strip()[2:])
+    else:
+        print("⚠️ no ritual logs found")
+
+
 
 def show_help():
     print("""ghost.py — local ghost CLI
@@ -98,6 +137,8 @@ if __name__ == "__main__":
         if len(args) > 1 and args[1] == "--message":
             custom_msg = " ".join(args[2:])
         ghost_push(custom_msg)
+    elif cmd == "status":
+        ghost_status()
     else:
         show_help()
 
