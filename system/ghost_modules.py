@@ -18,3 +18,7 @@ MODULES = {
         "interoperability": [''],
     },
 }
+
+def run_ritual_for_task(task):
+    print(f"[ghost_modules] running ritual for task: {task}")
+    # placeholder logic — eventually this will delegate to the appropriate module

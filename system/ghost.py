@@ -2,14 +2,16 @@
 
 import sys
 import subprocess
+import signal
 import os
+import psutil
 from datetime import datetime
 from pathlib import Path
 
 VAULT = Path.home() / "ghostvault"
 sys.path.append(str(VAULT / "system"))
 
-from Ghost_Os import MODULES # exact file name, case-sensitive
+from ghost_modules import MODULES # exact file name, case-sensitive
 
 
 def log_event(msg):
@@ -92,8 +94,8 @@ def ghost_sync_modules():
     for name in new_modules:
         print(f"• {name}")
 
-    # write to Ghost_Os.py
-    module_path = VAULT / "system" / "Ghost_Os.py"
+    # write to ghost_modules.py
+    module_path = VAULT / "system" / "ghost_modules.py"
     with module_path.open("w") as f:
         f.write("MODULES = {\n")
         for name, data in new_modules.items():
@@ -107,7 +109,7 @@ def ghost_sync_modules():
             f.write("    },\n")
         f.write("}\n")
 
-    print("✅ Ghost_Os.py updated")
+    print("✅ ghost_modules.py updated")
 
 def ghost_gen_prompt(module_name):
     print(f"📦 generating prompt for module: {module_name}")
@@ -303,6 +305,113 @@ if __name__ == "__main__":
             print("❗ usage: ghost.py gen prompt <module_name>")
     elif cmd == "status":
         ghost_status()
+
+    # --- ghostd daemon management commands ---
+    elif cmd == "start":
+        # macOS-only: launchd autostart logic for ghostd
+        # If ~/Library/LaunchAgents/com.ghostos.ghostd.plist does not exist, prompt to install autostart plist.
+        # If user agrees, create the plist, load it with launchctl, and echo status.
+        # If not, start the daemon once with subprocess.Popen.
+        import sys
+        import getpass
+        import shutil
+        # --- macOS-only implementation of autostart via launchd. Cross-platform support is a future enhancement. ---
+        print("👻 starting ghostd...")
+        home = Path.home()
+        launch_agents_dir = home / "Library" / "LaunchAgents"
+        plist_path = launch_agents_dir / "com.ghostos.ghostd.plist"
+        ghostd_path = VAULT / "system" / "ghostd.py"
+        python_exec = sys.executable
+        # Check if plist exists
+        if not plist_path.exists():
+            try:
+                reply = input("no ghost daemon on launch. install autostart plist? (y/n): ").strip().lower()
+            except (EOFError, KeyboardInterrupt):
+                print("\n❌ Aborted.")
+                sys.exit(1)
+            if reply == "y":
+                # Create LaunchAgents directory if needed
+                try:
+                    launch_agents_dir.mkdir(parents=True, exist_ok=True)
+                except Exception as e:
+                    print(f"❌ Failed to create LaunchAgents directory: {e}")
+                    sys.exit(1)
+                # Write plist XML
+                plist_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ghostos.ghostd</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>{python_exec}</string>
+        <string>{ghostd_path}</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>
+"""
+                try:
+                    with open(plist_path, "w") as f:
+                        f.write(plist_xml)
+                    print(f"✅ launchd plist created at {plist_path}")
+                except Exception as e:
+                    print(f"❌ Failed to write plist: {e}")
+                    sys.exit(1)
+                # Load with launchctl
+                try:
+                    subprocess.run(["launchctl", "load", str(plist_path)], check=True)
+                    print("🚀 ghostd autostarted via launchd.")
+                    print("ℹ️ ghostd will now run at login (and is running now).")
+                except subprocess.CalledProcessError as e:
+                    print(f"❌ launchctl load failed: {e}")
+                    print("You may need to load the plist manually or check permissions.")
+            else:
+                # Start the daemon once (not persistent)
+                try:
+                    process = subprocess.Popen([python_exec, str(ghostd_path)])
+                    with open("ghostd.pid", "w") as f:
+                        f.write(str(process.pid))
+                    print(f"👻 ghostd running with PID {process.pid} (one-shot, not persistent)")
+                except Exception as e:
+                    print(f"❌ Failed to start ghostd: {e}")
+        else:
+            # Plist exists, try to load it (if not already loaded)
+            try:
+                subprocess.run(["launchctl", "load", str(plist_path)], check=True)
+                print("🚀 ghostd launchd plist already exists and loaded.")
+                print("ℹ️ ghostd will run at login (and is running now).")
+            except subprocess.CalledProcessError as e:
+                print(f"❌ launchctl load failed: {e}")
+                print("You may need to load the plist manually or check permissions.")
+    elif cmd == "stop":
+        # Stop the ghost daemon
+        if not os.path.exists("ghostd.pid"):
+            print("❌ no running ghostd process found.")
+        else:
+            with open("ghostd.pid", "r") as f:
+                pid = int(f.read())
+            try:
+                os.kill(pid, signal.SIGTERM)
+                print("🛑 ghostd stopped.")
+            except ProcessLookupError:
+                print("⚠️ process not found. cleaning up.")
+            os.remove("ghostd.pid")
+    elif cmd == "statusd":
+        # Check ghostd daemon status
+        if not os.path.exists("ghostd.pid"):
+            print("🟡 ghostd not running.")
+        else:
+            with open("ghostd.pid", "r") as f:
+                pid = int(f.read())
+            if psutil.pid_exists(pid):
+                print(f"🟢 ghostd is running (PID {pid})")
+            else:
+                print("🟡 ghostd PID file found but process not active.")
     elif cmd == "echo":
         ghost_echo()
     elif cmd == "sync":
