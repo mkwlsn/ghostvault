@@ -10,3 +10,9 @@
 - [ ] 📡 ghost gen prompt
 - [ ] investigate fragment interference 🌫️
 - [ ] refine lobotomizr interop model 🧷
+- [ ] resurrect the daemon
+- [ ] test-task
+- [ ] test-task
+- [ ] test-task
+- [ ] test-task
+- [ ] test-task
