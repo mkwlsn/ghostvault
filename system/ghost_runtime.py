@@ -1,0 +1,35 @@
+from pathlib import Path
+from datetime import datetime
+
+from ghost_config import VAULT, SYSTEM
+
+def log_event(msg):
+    path = VAULT / "memory" / "events.md"
+    with path.open("a") as f:
+        f.write(f"- {datetime.today().date()} — {msg}\n")
+    print(f"📝 log saved: {msg}")
+
+def queue_task(task):
+    path = SYSTEM / "ghost-queue.md"
+    with path.open("a") as f:
+        f.write(f"- [ ] {task}\n")
+    print(f"📋 task queued: {task}")
+
+def log_ritual(summary):
+    date_str = datetime.today().strftime("%Y-%m-%d")
+    path = VAULT / "rituals" / f"daily-log-{date_str}.md"
+    header = f"# 🔁 ritual log — {date_str}\n\n"
+    if not path.exists():
+        path.write_text(header)
+    with path.open("a") as f:
+        f.write(f"- {summary}\n")
+    print(f"📿 ritual logged for {date_str}")
+
+
+
+""" ghost really wanted this stubbed out, i dont think we need it, but the ghost insisted, idk """
+# def dispatch_module_task(task):
+#     for name, data in MODULES.items():
+#         if name.lower() in task.lower():
+#             print(f"🔁 matched task to module: {name}")
+#             return  # eventually call the module handler
