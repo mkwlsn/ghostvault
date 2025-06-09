@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
-QUEUE_PATH = Path(__file__).resolve().parent.parent / "memory" / "queue.json"
+from ghost_config import VAULT
+
+QUEUE_PATH = VAULT / "memory" / "queue.json"
 
 def load_queue():
     if not QUEUE_PATH.exists():
@@ -20,7 +22,3 @@ def clear_task(task_description):
     with open(QUEUE_PATH, "w") as f:
         json.dump(new_queue, f, indent=2)
     return new_queue
-
-def run_ritual_for_task(task):
-    print(f"[ghost_modules] running ritual for task: {task}")
-    # placeholder logic — eventually this will delegate to the appropriate module

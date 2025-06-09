@@ -3,3 +3,36 @@ Thumbs.db
 *.log
 memory/fragments.json
 ghost.tmp
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.ghostenv
+
+# VSCode
+.vscode/
+
+# Obsidian
+.obsidian/
+
+# Test artifacts
+*.tmp
+*.log
+ghost.tmp
+
+# OS
+.DS_Store
+Thumbs.db

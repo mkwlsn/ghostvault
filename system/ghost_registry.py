@@ -12,9 +12,9 @@ MODULES = {
         "interoperability": [''],
     },
     "lobotomizr": {
-        "description": "",
-        "inputs": [''],
-        "outputs": [''],
-        "interoperability": [''],
+        "description": "Extracts surplus cognition from overwhelmed modules and containers it in dormant ritual space.",
+        "inputs": [],
+        "outputs": [],
+        "interoperability": [],
     },
 }
