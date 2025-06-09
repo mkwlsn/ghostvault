@@ -1,8 +1,4 @@
-.DS_Store
-Thumbs.db
-*.log
 memory/fragments.json
-ghost.tmp
 # Python
 __pycache__/
 *.pyc
@@ -32,6 +28,7 @@ env/
 *.tmp
 *.log
 ghost.tmp
+ghostvault_tree.md
 
 # OS
 .DS_Store
