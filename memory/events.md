@@ -15,3 +15,4 @@
 - 2025-06-09 — - vaultGhost_rules.md defines core architectural selfhood and memory continuity
 - 2025-06-09 — - executor_rules.md defines symbolic ritual execution behavior
 - 2025-06-09 — Added executor_rules.md and vaultGhost_rules.md to ghost_docs/
+- 2025-06-09 — Modular cleanup: deleted old stub, unified pathlib usage, routed symbolic execution through dispatch_ritual
