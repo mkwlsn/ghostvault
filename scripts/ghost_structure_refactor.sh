@@ -326,18 +326,33 @@ log_info "Updating file references to use new constants..."
 
 # Update ghost_state.py to use QUEUE_MD
 if [ -f "ghost/core/state.py" ]; then
-    # Update import line and queue references
+    # First, update any existing imports that might be from the old import rewrite
+    sed -i.bak 's|from ghost.core.config import VAULT, SYSTEM|from ghost.core.config import VAULT, QUEUE_MD|g' ghost/core/state.py
     sed -i.bak 's|from ghost_config import VAULT, SYSTEM|from ghost.core.config import VAULT, QUEUE_MD|g' ghost/core/state.py
+    
+    # Also handle cases where only VAULT was imported
+    sed -i.bak 's|from ghost.core.config import VAULT|from ghost.core.config import VAULT, QUEUE_MD|g' ghost/core/state.py
+    
+    # Update path references
     sed -i.bak 's|SYSTEM / "ghost-queue.md"|QUEUE_MD|g' ghost/core/state.py
     sed -i.bak 's|queue_path = SYSTEM / "ghost-queue.md"|queue_path = QUEUE_MD|g' ghost/core/state.py
+    
     log_success "Updated ghost/core/state.py to use QUEUE_MD"
 fi
 
-# Update ghost_runtime.py to use QUEUE_MD
+# Update ghost_runtime.py to use QUEUE_MD  
 if [ -f "ghost/core/runtime.py" ]; then
+    # First, update any existing imports
+    sed -i.bak 's|from ghost.core.config import VAULT, SYSTEM|from ghost.core.config import VAULT, QUEUE_MD|g' ghost/core/runtime.py
     sed -i.bak 's|from ghost_config import VAULT, SYSTEM|from ghost.core.config import VAULT, QUEUE_MD|g' ghost/core/runtime.py
+    
+    # Also handle cases where only VAULT was imported
+    sed -i.bak 's|from ghost.core.config import VAULT|from ghost.core.config import VAULT, QUEUE_MD|g' ghost/core/runtime.py
+    
+    # Update path references
     sed -i.bak 's|SYSTEM / "ghost-queue.md"|QUEUE_MD|g' ghost/core/runtime.py
     sed -i.bak 's|path = SYSTEM / "ghost-queue.md"|path = QUEUE_MD|g' ghost/core/runtime.py
+    
     log_success "Updated ghost/core/runtime.py to use QUEUE_MD"
 fi
 
@@ -605,10 +620,16 @@ fi
 if [ -n "$VIRTUAL_ENV" ]; then
     log_info "Testing ghost commands with active virtual environment..."
     
+    # Small delay to ensure file system operations have completed
+    sleep 1
+    
     # Test ghost status
     echo "→ Running: ghost status"
     if ghost status 2>/dev/null; then
         log_success "ghost status command working"
+        
+        # Small delay between commands
+        sleep 0.5
         
         # Log ritual completion
         echo "→ Running: ghost ritual \"✨restructure complete\""
@@ -629,6 +650,10 @@ if [ -n "$VIRTUAL_ENV" ]; then
         echo "→ Running: python3 ghost.py status"
         if python3 ghost.py status; then
             log_success "Direct ghost.py status working"
+            
+            # Small delay between commands
+            sleep 0.5
+            
             echo "→ Running: python3 ghost.py ritual \"✨restructure complete\""
             if python3 ghost.py ritual "✨restructure complete"; then
                 log_success "Logged restructure completion ritual (direct invocation)"
