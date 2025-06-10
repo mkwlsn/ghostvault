@@ -379,30 +379,73 @@ if [ -f "ghost/ghostd.py" ]; then
     sed -i.bak 's|import ghost_queue|import ghost.core.queue as ghost_queue|g' ghost/ghostd.py
     sed -i.bak 's|import ghost_runtime|import ghost.core.runtime as ghost_runtime|g' ghost/ghostd.py
     log_success "Fixed ghostd.py imports"
+else
+    log_warning "ghostd.py not found in expected location - daemon fixes skipped"
+    skipped+=("ghostd.py import fixes")
 fi
 
 # Fix daemon process management paths
 if [ -f "ghost/core/daemon.py" ]; then
+    # Update ghostd path references to new location
     sed -i.bak 's|SYSTEM / "ghostd.py"|VAULT / "ghost" / "ghostd.py"|g' ghost/core/daemon.py
+    sed -i.bak 's|str(SYSTEM / "ghostd.py")|str(VAULT / "ghost" / "ghostd.py")|g' ghost/core/daemon.py
+    
+    # Fix PID file handling to use absolute paths
     sed -i.bak 's|"ghostd.pid"|STATE_DIR / "daemon.pid"|g' ghost/core/daemon.py
-    log_success "Fixed daemon management paths"
+    sed -i.bak 's|os.path.exists("ghostd.pid")|os.path.exists(str(STATE_DIR / "daemon.pid"))|g' ghost/core/daemon.py
+    sed -i.bak 's|open("ghostd.pid"|open(str(STATE_DIR / "daemon.pid")|g' ghost/core/daemon.py
+    sed -i.bak 's|os.remove("ghostd.pid")|os.remove(str(STATE_DIR / "daemon.pid"))|g' ghost/core/daemon.py
+    
+    # Add STATE_DIR import if not present
+    if ! grep -q "STATE_DIR" ghost/core/daemon.py; then
+        sed -i.bak '1i from ghost.core.config import VAULT, STATE_DIR' ghost/core/daemon.py
+    fi
+    
+    log_success "Fixed daemon management paths and PID handling"
+else
+    log_warning "ghost/core/daemon.py not found - daemon management fixes skipped"
+    skipped+=("daemon management path fixes")
+fi
+
+# Fix ghostd.py PID file references too
+if [ -f "ghost/ghostd.py" ]; then
+    sed -i.bak 's|"ghostd.pid"|STATE_DIR / "daemon.pid"|g' ghost/ghostd.py
+    sed -i.bak 's|open("ghostd.pid"|open(str(STATE_DIR / "daemon.pid")|g' ghost/ghostd.py
+    
+    # Add STATE_DIR import if not present
+    if ! grep -q "STATE_DIR" ghost/ghostd.py; then
+        sed -i.bak '1i from ghost.core.config import STATE_DIR' ghost/ghostd.py
+    fi
+    
+    log_success "Fixed ghostd.py PID file handling"
 fi
 
 # Fix hardcoded system/ paths in moved files
+log_info "Updating hardcoded system/ paths..."
 for file in ghost/cli/*.py ghost/core/*.py ghost/utils/*.py; do
     if [ -f "$file" ]; then
         sed -i.bak 's|VAULT / "system"|CORE_DIR|g' "$file"
         sed -i.bak 's|/ "system" /|/ "ghost" / "core" /|g' "$file"
+        # Fix any remaining system/ references
+        sed -i.bak 's|"system/|"ghost/core/|g' "$file"
+        sed -i.bak 's|system/|ghost/core/|g' "$file"
     fi
 done
 log_success "Updated hardcoded system/ paths"
 
 # Update CLI symlink target if it exists
+log_info "Checking CLI symlink..."
 local_bin="$HOME/.local/bin"
 if [ -L "$local_bin/ghost" ]; then
+    old_target=$(readlink "$local_bin/ghost")
     rm "$local_bin/ghost"
     ln -s "$(pwd)/ghost.py" "$local_bin/ghost"
-    log_success "Updated CLI symlink target"
+    log_success "Updated CLI symlink target (was: $old_target)"
+elif [ -f "$local_bin/ghost" ]; then
+    log_warning "Non-symlink ghost file exists at $local_bin/ghost - manual review needed"
+    skipped+=("CLI symlink update - file conflict")
+else
+    log_info "No existing CLI symlink found - will be created by install process"
 fi
 
 # Step 19: Fix root CLI entry point
