@@ -1,7 +1,7 @@
 import subprocess
 from datetime import datetime
 
-from ghost_config import VAULT, SYSTEM
+from ghost.core.config import VAULT, QUEUE_MD, QUEUE_MD
 
 def ghost_status():
     print("🔍 ghost status report\n")
@@ -16,7 +16,7 @@ def ghost_status():
 
     # queue
     print("\n📋 queue:")
-    queue_path = SYSTEM / "ghost-queue.md"
+    queue_path = QUEUE_MD
     if queue_path.exists():
         with queue_path.open() as f:
             lines = [line.strip() for line in f if line.startswith("- [ ]")]
@@ -67,7 +67,7 @@ def ghost_echo():
     else:
         print("🔁 no rituals found")
 
-    queue_path = SYSTEM / "ghost-queue.md"
+    queue_path = QUEUE_MD
     print_last_line(queue_path, "last task", "📋")
 
     event_path = VAULT / "memory" / "events.md"

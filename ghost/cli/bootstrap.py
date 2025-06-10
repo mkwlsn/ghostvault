@@ -4,7 +4,7 @@ import time
 import subprocess
 from pathlib import Path
 
-from ghost_config import SYSTEM, VAULT
+from ghost.core.config import SYSTEM, VAULT
 
 def ensure_path():
     system_path = VAULT / "system"
@@ -40,7 +40,7 @@ def ghost_bootstrap_routine(mode="normie"):
         elapsed = round(time.time() - start_time, 2)
         echo(f"> setup complete in {elapsed}s")
     elif mode == "cursed":
-        from ghost_utils import cursed_echo
+        from ghost.utils.ghost_utils import cursed_echo
         cursed_echo()
 
 def run_ghost_bootstrap(cmd):

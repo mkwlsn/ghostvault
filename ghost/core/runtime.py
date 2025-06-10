@@ -1,7 +1,7 @@
 from pathlib import Path
 from datetime import datetime
 
-from ghost_config import VAULT, SYSTEM
+from ghost.core.config import VAULT, QUEUE_MD, QUEUE_MD
 
 def log_event(msg):
     path = VAULT / "memory" / "events.md"
@@ -10,7 +10,7 @@ def log_event(msg):
     print(f"📝 log saved: {msg}")
 
 def queue_task(task):
-    path = SYSTEM / "ghost-queue.md"
+    path = QUEUE_MD
     with path.open("a") as f:
         f.write(f"- [ ] {task}\n")
     print(f"📋 task queued: {task}")
@@ -29,7 +29,7 @@ def log_ritual(summary):
 
 """ ghost really wanted this stubbed out, i dont think we need it, but the ghost insisted, idk """
 def dispatch_ritual(task: str):
-    from ghost_registry import MODULES  # symbolic index
+    from ghost.core.registry import MODULES  # symbolic index
     for name, data in MODULES.items():
         if name.lower() in task.lower():
             print(f"🔮 matched ritual: {name}")

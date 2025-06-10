@@ -1,4 +1,4 @@
-from ghost.core.config import STATE_DIR# ghostd.py — GhostOS local daemon
+# ghostd.py — GhostOS local daemon
 
 """
 watches the queue and memory system for tasks and triggers corresponding rituals.

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from ghost_config import VAULT
+from ghost.core.config import VAULT
 
 QUEUE_PATH = VAULT / "memory" / "queue.json"
 

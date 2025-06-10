@@ -5,7 +5,7 @@ import os
 import shutil
 from pathlib import Path
 from system.ghost_init import cursed_output, clean_output
-from ghost_config import VAULT, RITUALS
+from ghost.core.config import VAULT, RITUALS
 
 
 def check_python_version():
