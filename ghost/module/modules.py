@@ -1,7 +1,7 @@
 import datetime
 
-from ghost_config import VAULT, SYSTEM
-from ghost_registry import MODULES
+from ghost.core.config import VAULT, SYSTEM
+from ghost.core.registry import MODULES
 
 def new_module(name):
     path = VAULT / "modules" / f"{name}.md"

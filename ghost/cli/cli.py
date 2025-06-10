@@ -1,10 +1,10 @@
 import sys
-from ghost_runtime import (
+from ghost.core.runtime import (
     log_event, queue_task, log_ritual
 )
-from ghost_modules import new_module, ghost_sync_modules, ghost_gen_prompt
-from ghost_state import ghost_status, ghost_echo
-from ghost_utils import macro_expand, ghost_push
+from ghost.module.modules import new_module, ghost_sync_modules, ghost_gen_prompt
+from ghost.core.state import ghost_status, ghost_echo
+from ghost.utils.ghost_utils import macro_expand, ghost_push
 
 
 def show_help():
@@ -84,15 +84,15 @@ def main():
                 print("❗ usage: ghost sync modules")
 
         case "start":
-            from ghost_daemon import start_ghostd
+            from ghost.core.daemon import start_ghostd
             start_ghostd()
 
         case "stop":
-            from ghost_daemon import stop_ghostd
+            from ghost.core.daemon import stop_ghostd
             stop_ghostd()
 
         case "statusd":
-            from ghost_daemon import status_ghostd
+            from ghost.core.daemon import status_ghostd
             status_ghostd()
 
         case _:

@@ -31,20 +31,20 @@ class TestGhostInit(unittest.TestCase):
         self.assertIn("𝔤𝔥𝔬𝔰𝔱 𝔦𝔰 𝔟𝔬𝔲𝔫𝔡", result.stdout)
 
     def test_ghostd_status(self):
-        from ghost_daemon import status_ghostd
+        from ghost.core.daemon import status_ghostd
         result = status_ghostd()
         self.assertTrue(result is None or isinstance(result, str), "Expected status_ghostd() to return a string or None")
         self.assertIn("status", result.lower() if result else "")
 
     def test_module_sync_runs(self):
-        from ghost_modules import ghost_sync_modules
+        from ghost.module.modules import ghost_sync_modules
         try:
             ghost_sync_modules()
         except Exception as e:
             self.fail(f"ghost_sync_modules() raised an exception: {e}")
 
     def test_queue_and_log_task(self):
-        from ghost_runtime import queue_task, log_event
+        from ghost.core.runtime import queue_task, log_event
         try:
             queue_task("test-task")
             log_event("Test event log")

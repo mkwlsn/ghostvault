@@ -5,14 +5,14 @@ import sys
 import psutil
 from pathlib import Path
 
-from ghost_config import SYSTEM
+from ghost.core.config import SYSTEM
 
 def start_ghostd():
     print("👻 starting ghostd...")
     home = Path.home()
     launch_agents_dir = home / "Library" / "LaunchAgents"
     plist_path = launch_agents_dir / "com.ghostos.ghostd.plist"
-    ghostd_path = SYSTEM / "ghostd.py"
+    ghostd_path = VAULT / "ghost" / "ghostd.py"
     python_exec = sys.executable
 
     if not plist_path.exists():
@@ -53,7 +53,7 @@ def start_ghostd():
         else:
             try:
                 process = subprocess.Popen([python_exec, str(ghostd_path)])
-                with open("ghostd.pid", "w") as f:
+                with open(STATE_DIR / "daemon.pid", "w") as f:
                     f.write(str(process.pid))
                 print(f"👻 ghostd running with PID {process.pid} (one-shot, not persistent)")
             except Exception as e:
@@ -66,23 +66,23 @@ def start_ghostd():
             print(f"❌ launchctl load failed: {e}")
 
 def stop_ghostd():
-    if not os.path.exists("ghostd.pid"):
+    if not os.path.exists(STATE_DIR / "daemon.pid"):
         print("❌ no running ghostd process found.")
     else:
-        with open("ghostd.pid", "r") as f:
+        with open(STATE_DIR / "daemon.pid", "r") as f:
             pid = int(f.read())
         try:
             os.kill(pid, signal.SIGTERM)
             print("🛑 ghostd stopped.")
         except ProcessLookupError:
             print("⚠️ process not found. cleaning up.")
-        os.remove("ghostd.pid")
+        os.remove(STATE_DIR / "daemon.pid")
 
 def status_ghostd():
-    if not os.path.exists("ghostd.pid"):
+    if not os.path.exists(STATE_DIR / "daemon.pid"):
         return "status: not running"
     else:
-        with open("ghostd.pid", "r") as f:
+        with open(STATE_DIR / "daemon.pid", "r") as f:
             pid = int(f.read())
         if psutil.pid_exists(pid):
             return f"status: running (PID {pid})"

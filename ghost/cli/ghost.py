@@ -7,10 +7,10 @@ args = sys.argv[1:]
 command = args[0] if args else None
 
 try:
-    from ghost_cli import main
+    from ghost.cli.cli import main
 except ModuleNotFoundError:
     if command in {"install", "init"}:
-        from ghost_bootstrap import bootstrap_main as main
+        from ghost.cli.bootstrap import bootstrap_main as main
     else:
         print("❗ system modules unavailable — run `ghost init` to configure your environment.")
         exit(1)
