@@ -64,8 +64,14 @@ required_files=(
   "system/ghost.py"
   "system/ghostd.py" 
   "system/ghost_cli.py"
+  "system/ghost_daemon.py"
   "system/ghost_config.py"
   "system/ghost_queue.py"
+  "system/ghost_runtime.py"
+  "system/ghost_state.py"
+  "system/ghost_modules.py"
+  "system/ghost_utils.py"
+  "system/ghost_registry.py"
 )
 
 for file in "${required_files[@]}"; do
@@ -130,11 +136,15 @@ find ghost -type d -exec touch {}/__init__.py \;
 # Step 4: Move CLI files
 log_info "Moving CLI files..."
 git mv system/ghost.py ghost/cli/ghost.py
-git mv system/ghostd.py ghost/ghostd.py
+git mv system/ghost_cli.py ghost/cli/cli.py
 git mv system/ghost_bootstrap.py ghost/cli/bootstrap.py
 git mv system/ghost_install.py ghost/cli/install.py
 git mv system/ghost_init.py ghost/cli/init.py
-git mv system/ghost_cli.py ghost/cli/cli.py
+
+# Step 5: Move daemon (keep at root level for process management)
+log_info "Moving daemon files..."
+git mv system/ghostd.py ghost/ghostd.py
+git mv system/ghost_daemon.py ghost/core/daemon.py
 
 # Step 5: Move core logic
 log_info "Moving core files..."
@@ -359,7 +369,65 @@ if [ -f "ghost/core/runtime.py" ]; then
     log_success "Updated ghost/core/runtime.py to use QUEUE_MD"
 fi
 
-# Step 18: Run import updates
+# Step 18: Critical fixes for daemon and CLI functionality
+log_info "Applying critical functionality fixes..."
+
+# Fix ghostd.py imports
+if [ -f "ghost/ghostd.py" ]; then
+    sed -i.bak 's|from ghost_queue|from ghost.core.queue|g' ghost/ghostd.py
+    sed -i.bak 's|from ghost_runtime|from ghost.core.runtime|g' ghost/ghostd.py
+    sed -i.bak 's|import ghost_queue|import ghost.core.queue as ghost_queue|g' ghost/ghostd.py
+    sed -i.bak 's|import ghost_runtime|import ghost.core.runtime as ghost_runtime|g' ghost/ghostd.py
+    log_success "Fixed ghostd.py imports"
+fi
+
+# Fix daemon process management paths
+if [ -f "ghost/core/daemon.py" ]; then
+    sed -i.bak 's|SYSTEM / "ghostd.py"|VAULT / "ghost" / "ghostd.py"|g' ghost/core/daemon.py
+    sed -i.bak 's|"ghostd.pid"|STATE_DIR / "daemon.pid"|g' ghost/core/daemon.py
+    log_success "Fixed daemon management paths"
+fi
+
+# Fix hardcoded system/ paths in moved files
+for file in ghost/cli/*.py ghost/core/*.py ghost/utils/*.py; do
+    if [ -f "$file" ]; then
+        sed -i.bak 's|VAULT / "system"|CORE_DIR|g' "$file"
+        sed -i.bak 's|/ "system" /|/ "ghost" / "core" /|g' "$file"
+    fi
+done
+log_success "Updated hardcoded system/ paths"
+
+# Update CLI symlink target if it exists
+local_bin="$HOME/.local/bin"
+if [ -L "$local_bin/ghost" ]; then
+    rm "$local_bin/ghost"
+    ln -s "$(pwd)/ghost.py" "$local_bin/ghost"
+    log_success "Updated CLI symlink target"
+fi
+
+# Step 19: Fix root CLI entry point
+log_info "Creating new root CLI entry point..."
+cat > ghost.py << 'EOF'
+#!/usr/bin/env python3
+"""
+GhostOS CLI Entry Point
+Delegates to ghost.cli.ghost for actual CLI functionality
+"""
+
+import sys
+from pathlib import Path
+
+# Add ghost package to path
+sys.path.insert(0, str(Path(__file__).parent))
+
+if __name__ == "__main__":
+    from ghost.cli.ghost import main
+    main()
+EOF
+chmod +x ghost.py
+log_success "Created new root CLI entry point"
+
+# Step 20: Run import updates
 log_info "Updating import statements..."
 if python3 scripts/update_imports.py; then
     log_success "Import statements updated successfully"

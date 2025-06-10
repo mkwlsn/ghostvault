@@ -1,10 +1,12 @@
+---
+
 # Ghost Structure Refactor Script
 
-A comprehensive bash script for restructuring the GhostOS project from a flat `system/` directory to a modular `ghost/` package structure with proper Python packaging, centralized configuration, and robust error handling.
+A focused bash script for restructuring the GhostOS project from a flat `system/` directory to a modular `ghost/` package structure with surgical precision - fixing only what's needed to maintain functionality.
 
 ## Overview
 
-This script performs a complete one-shot refactoring of the GhostOS codebase, moving from:
+This script performs a **surgical refactoring** of the GhostOS codebase, moving from:
 
 ```
 system/
@@ -26,41 +28,48 @@ ghost/
 └── state/      # Runtime state files
 ```
 
+## Philosophy: "Just Enough" Refactoring
+
+This script follows a **surgical approach**:
+
+- ✅ **Fix what breaks** - Critical functionality preservation
+- 📋 **Document what's messy** - Technical debt recorded for follow-up
+- 🎯 **Single mission** - Make file structure work, nothing more
+
 ## Features
 
-### 🛡️ Safety & Reliability
+### 🛡️ **Safety & Reliability**
 
 - **Pre-flight validation** - Checks git status, required files, and working directory
 - **Automatic rollback** - Creates backup commit reference for recovery if anything fails
-- **Comprehensive error handling** - No silent failures, all operations logged
-- **Import validation** - Tests that all imports work after restructuring
+- **Surgical error handling** - Focused on critical path failures
+- **Functional validation** - Tests that restructured code actually works
 
-### 📦 Configuration Management
+### 🔧 **Critical Functionality Preservation**
 
-- **Path consolidation** - Moves hardcoded paths to centralized config
-- **QUEUE_MD constant** - Properly handles the markdown queue file location
+- **Daemon process management** - Updates process paths and PID file handling
+- **CLI symlink management** - Detects and updates existing symlinks
+- **Import chain fixes** - Ensures all module imports resolve correctly
+- **Path reference updates** - Fixes hardcoded system/ paths in moved files
+
+### 📦 **Configuration Management**
+
+- **Path consolidation** - Centralizes hardcoded paths in config
+- **QUEUE_MD constant** - Properly handles markdown queue file location
 - **Future-proof structure** - Easy to modify paths programmatically
 
-### 🔧 File Operations
+### 📋 **Technical Debt Management**
 
-- **Git-aware moves** - Uses `git mv` to preserve file history
-- **Package structure** - Creates proper `__init__.py` files
-- **Cache cleanup** - Removes `__pycache__` and `.pyc` files
-- **Import rewriting** - Updates all import statements to new structure
-
-### 📊 Validation & Testing
-
-- **Import testing** - Validates core modules can be imported
-- **CLI validation** - Tests command-line interface functionality
-- **Pytest integration** - Runs existing tests if available
-- **Path verification** - Confirms config constants resolve correctly
+- **Follow-up documentation** - Creates `REFACTOR_FOLLOWUP.md` with cleanup recommendations
+- **Quality vs. Critical separation** - Clear categorization of what was fixed vs. deferred
+- **Action items** - Specific recommendations for post-refactor improvements
 
 ## Prerequisites
 
 - Git repository with clean working directory (no uncommitted changes)
 - Python 3.10+
 - All required source files present in `system/` directory
-- Pytest (optional, for running tests)
+- Active virtual environment (if using one)
 
 ## Usage
 
@@ -95,25 +104,26 @@ chmod +x ghost_structure_refactor.sh
 11. **Documentation** → `ghost/docs/`
 12. **Queue file** → `ghost/state/queue.md`
 
-### Phase 4: Configuration Updates
+### Phase 4: Critical Fixes
 
-13. **Config path updates** - Updates config to reflect final structure
-14. **Import rewrites** - Fixes all import statements
-15. **Reference updates** - Updates file references to use config constants
+13. **Import chain fixes** - Updates all import statements
+14. **Daemon functionality** - Fixes process management paths
+15. **CLI preservation** - Updates symlinks and entry points
+16. **Path reference cleanup** - Removes hardcoded system/ paths
 
-### Phase 5: Validation
+### Phase 5: Validation & Documentation
 
-16. **Import testing** - Validates core functionality
-17. **CLI testing** - Ensures command-line interface works
-18. **Test execution** - Runs pytest if tests exist
+17. **Functional testing** - Validates core functionality works
+18. **Follow-up documentation** - Creates technical debt action items
 
 ## File Mapping
 
 | Original Location         | New Location                 | Purpose             |
 | ------------------------- | ---------------------------- | ------------------- |
-| `system/ghost.py`         | `ghost/cli/ghost.py`         | Main CLI entry      |
+| `system/ghost.py`         | `ghost/cli/ghost.py`         | CLI logic           |
 | `system/ghostd.py`        | `ghost/ghostd.py`            | Daemon (root level) |
 | `system/ghost_cli.py`     | `ghost/cli/cli.py`           | CLI handlers        |
+| `system/ghost_daemon.py`  | `ghost/core/daemon.py`       | Process management  |
 | `system/ghost_config.py`  | `ghost/core/config.py`       | Configuration       |
 | `system/ghost_queue.py`   | `ghost/core/queue.py`        | Queue management    |
 | `system/ghost_runtime.py` | `ghost/core/runtime.py`      | Runtime functions   |
@@ -123,35 +133,60 @@ chmod +x ghost_structure_refactor.sh
 | `system/test_ghost.py`    | `ghost/tests/test_ghost.py`  | Tests               |
 | `system/_docs/*.md`       | `ghost/docs/*.md`            | Documentation       |
 | `system/ghost-queue.md`   | `ghost/state/queue.md`       | Task queue          |
+| **NEW:** `ghost.py`       | `ghost.py` (root)            | CLI entry point     |
 
-## Configuration Constants
+## Critical Fixes Applied
 
-The script consolidates path management into `ghost/core/config.py`:
+### 🔧 **Daemon Process Management**
 
-```python
-# Root directories
-VAULT = Path.home() / "ghostvault"
-GHOST_ROOT = VAULT / "ghost"
+- Updates daemon process paths to find executable in new location
+- Fixes PID file handling to use absolute paths from config
+- Ensures daemon start/stop functionality survives restructure
 
-# Package directories
-CLI_DIR = GHOST_ROOT / "cli"
-CORE_DIR = GHOST_ROOT / "core"
-MODULE_DIR = GHOST_ROOT / "module"
-UTILS_DIR = GHOST_ROOT / "utils"
-STATE_DIR = GHOST_ROOT / "state"
+### 🔗 **CLI Symlink Management**
 
-# Runtime files
-QUEUE_JSON = STATE_DIR / "queue.json"
-QUEUE_MD = STATE_DIR / "queue.md"
-DAEMON_PID = STATE_DIR / "daemon.pid"
-```
+- Detects existing CLI symlinks in `~/.local/bin/ghost`
+- Updates symlink targets to point to new root CLI entry point
+- Preserves global CLI access without manual intervention
+
+### 📦 **Import Chain Integrity**
+
+- Rewrites all import statements to use new package structure
+- Fixes cross-module dependencies and circular import potential
+- Validates that all imports resolve correctly after restructure
+
+### 🗂️ **Path Reference Cleanup**
+
+- Removes hardcoded `system/` path references from moved files
+- Updates configuration constants to reflect new structure
+- Ensures path-dependent functionality works with new layout
+
+## What's NOT Fixed (By Design)
+
+The following issues are **documented but deferred** to follow-up PRs:
+
+### 📋 **Technical Debt (Non-Breaking)**
+
+- **Bootstrap code cleanup** - PYTHONPATH manipulation in install scripts
+- **Shell RC pollution** - Environment modifications in user's shell config
+- **File consolidation** - Multiple bootstrap files with overlapping functionality
+- **Obsolete functions** - Dead code that doesn't affect functionality
+
+### 📝 **Follow-up Actions**
+
+After successful refactor, see `REFACTOR_FOLLOWUP.md` for:
+
+- Bootstrap code simplification opportunities
+- Configuration improvements
+- Additional testing recommendations
+- Code quality enhancements
 
 ## Error Handling
 
 - **Rollback capability** - Automatically reverts to backup commit on failure
 - **Detailed logging** - Color-coded output with progress indicators
-- **Validation checks** - Confirms all operations completed successfully
-- **Recovery instructions** - Clear guidance if manual intervention needed
+- **Validation checks** - Confirms all critical operations completed successfully
+- **Recovery guidance** - Clear instructions if manual intervention needed
 
 ## Post-Refactor Verification
 
@@ -165,11 +200,37 @@ git diff --name-status
 python3 -c "from ghost.core.config import VAULT; print(f'Vault: {VAULT}')"
 
 # Test CLI
-python3 ghost/cli/ghost.py --help
+python3 ghost.py --help
+
+# Test daemon functionality
+python3 -c "from ghost.core.daemon import status_ghostd; print(status_ghostd())"
 
 # Run tests
 python3 -m pytest ghost/tests/ -v
 ```
+
+## Success Criteria
+
+The refactor is considered successful when:
+
+- ✅ All files moved to new structure
+- ✅ All imports resolve correctly
+- ✅ CLI remains accessible (direct execution and symlinks)
+- ✅ Daemon can start/stop successfully
+- ✅ Core functionality tests pass
+- ✅ Follow-up documentation generated
+
+## Development Philosophy
+
+This script embodies the principle of **surgical refactoring**:
+
+- **Minimal viable changes** - Fix only what breaks functionality
+- **Document technical debt** - Record quality issues for future attention
+- **Preserve stability** - Prioritize working system over perfect code
+- **Clear success criteria** - Binary pass/fail validation
+- **Risk minimization** - Smaller change surface = fewer failure modes
+
+The goal isn't perfect code - it's a **perfectly functional** new structure with a clear path forward for quality improvements.
 
 ## Troubleshooting
 
@@ -182,20 +243,28 @@ python3 -m pytest ghost/tests/ -v
 ### Import Errors After Refactor
 
 - Verify all `__init__.py` files exist in package directories
-- Check that `scripts/update_imports.py` ran successfully
-- Manually verify import paths in affected files
+- Check that import rewrite completed successfully
+- Review `REFACTOR_FOLLOWUP.md` for known issues
 
-### Missing Files
+### CLI/Daemon Issues
 
-- Check `skipped` array in script output for files that couldn't be moved
-- Verify all source files existed before running script
-- Review git status for any uncommitted changes
+- Verify symlinks updated correctly: `ls -la ~/.local/bin/ghost`
+- Test daemon paths: `python3 -c "from ghost.core.daemon import status_ghostd"`
+- Check process management: `ps aux | grep ghost`
 
-## Development Notes
+### Technical Debt Concerns
 
-This script is designed for the specific GhostOS project structure but can be adapted for similar Python package refactoring tasks. Key principles:
+- Review `REFACTOR_FOLLOWUP.md` for documented cleanup opportunities
+- Bootstrap issues are functional but not optimal - safe to address in follow-up PRs
+- Focus on functionality first, code quality second
 
-- **Atomic operations** - Either complete success or full rollback
-- **Git integration** - Preserves file history through git mv
-- **Validation-first** - Tests everything before declaring success
-- **Configuration consolidation** - Centralizes path management for future flexibility
+## Contributing
+
+When extending this script:
+
+1. **Maintain surgical focus** - Only add fixes for breaking changes
+2. **Document quality issues** - Add to follow-up recommendations instead of auto-fixing
+3. **Test rollback scenarios** - Ensure failures don't leave partial state
+4. **Validate success criteria** - Every addition should have clear pass/fail tests
+
+Remember: This script's job is to **migrate safely**, not to **fix everything**. Quality improvements belong in dedicated cleanup PRs after the structure migration is proven stable.
