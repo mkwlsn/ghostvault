@@ -7,7 +7,7 @@ can be run as a background process or invoked manually via CLI.
 
 import time
 from ghost_queue import load_queue, clear_task
-from ghost_modules import run_ritual_for_task
+from ghost_runtime import dispatch_ritual
 
 def ghostd_loop(poll_interval=10):
     print("👻 ghostd running — watching queue...")
@@ -15,7 +15,7 @@ def ghostd_loop(poll_interval=10):
         queue = load_queue()
         for task in queue:
             print(f"🔁 running ritual for: {task}")
-            run_ritual_for_task(task)
+            dispatch_ritual(task)
             clear_task(task)
         time.sleep(poll_interval)
 
