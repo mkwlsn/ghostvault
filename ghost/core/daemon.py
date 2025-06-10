@@ -5,7 +5,12 @@ import sys
 import psutil
 from pathlib import Path
 
-from ghost.core.config import SYSTEM
+from ghost.core.config import VAULT, DAEMON_PID
+
+def main():
+    print("[ghostd] daemon.py alive. looping...")
+    daemon_loop()
+
 
 def start_ghostd():
     print("👻 starting ghostd...")
@@ -35,7 +40,7 @@ def start_ghostd():
     <array>
         <string>{python_exec}</string>
         <string>{ghostd_path}</string>
-    </array>
+    </array>/by
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
@@ -53,7 +58,7 @@ def start_ghostd():
         else:
             try:
                 process = subprocess.Popen([python_exec, str(ghostd_path)])
-                with open(STATE_DIR / "daemon.pid", "w") as f:
+                with open(DAEMON_PID, "w") as f:
                     f.write(str(process.pid))
                 print(f"👻 ghostd running with PID {process.pid} (one-shot, not persistent)")
             except Exception as e:
