@@ -22,3 +22,4 @@
 - [ ] finalize .ghostproject as symbolic config artifact
 - [ ] complete architecture.md with current structure + daemon model
 - [ ] refine ghost gen prompt rituals with logic from executor_rules.md
+- [ ] improve ritual match strategy in dispatch_ritual()
