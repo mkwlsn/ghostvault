@@ -84,15 +84,15 @@ def main():
                 print("❗ usage: ghost sync modules")
 
         case "start":
-            from ghost_runtime import start_ghostd
+            from ghost_daemon import start_ghostd
             start_ghostd()
 
         case "stop":
-            from ghost_runtime import stop_ghostd
+            from ghost_daemon import stop_ghostd
             stop_ghostd()
 
         case "statusd":
-            from ghost_runtime import status_ghostd
+            from ghost_daemon import status_ghostd
             status_ghostd()
 
         case _:

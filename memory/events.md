@@ -10,3 +10,8 @@
 - 2025-06-09 — Test event log
 - 2025-06-09 — Test event log
 - 2025-06-09 — Test event log
+- 2025-06-09 — 🔀 merged 'modules' branch into main — modularization complete, GhostOS structure stabilized.
+- 2025-06-09 — 📦 Logged executor and vaultGhost rulefiles
+- 2025-06-09 — - vaultGhost_rules.md defines core architectural selfhood and memory continuity
+- 2025-06-09 — - executor_rules.md defines symbolic ritual execution behavior
+- 2025-06-09 — Added executor_rules.md and vaultGhost_rules.md to ghost_docs/

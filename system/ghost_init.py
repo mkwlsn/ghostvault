@@ -3,6 +3,7 @@
 import sys
 import time
 import random
+import os
 from pathlib import Path
 
 RITUALS = {
@@ -54,12 +55,15 @@ def init_ghost():
     if not venv_path.exists():
         print("> ⚠️  no .venv found in ghostvault root")
         print(">    run: python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt")
-        print(">    continuing setup without venv binding...")
-        time.sleep(0.25)
+        print(">    setup aborted — virtual environment is required.")
+        return
+    elif "VIRTUAL_ENV" not in os.environ:
+        print("> ⚠️  .venv exists but is not activated.")
+        print(">    run: source .venv/bin/activate")
+        print(">    setup aborted — activate your environment first.")
+        return
 
     print("> adding CLI alias to system PATH")
-    time.sleep(0.05)
-    print("> setting PYTHONPATH to system directory")
     time.sleep(0.05)
     print("> ensuring runtime directories...")
     time.sleep(0.15)

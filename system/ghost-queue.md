@@ -16,3 +16,9 @@
 - [ ] test-task
 - [ ] test-task
 - [ ] test-task
+- [ ] execute project restructure: exorcise 'ghost_' file prefixing, isolate docs/code/memory/cli, fix ghost.py import paths, perform ritual post-restructure
+- [ ] audit ghost_cli.py: document true command behavior, align echo/ritual/queue/status usage, scaffold ghost help if needed
+- [ ] implement ghost_sync.py and seance.md to enable symbolic project ingestion (post-restructure)
+- [ ] finalize .ghostproject as symbolic config artifact
+- [ ] complete architecture.md with current structure + daemon model
+- [ ] refine ghost gen prompt rituals with logic from executor_rules.md

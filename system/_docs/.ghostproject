@@ -1,0 +1,17 @@
+# .ghostproject
+
+ghost_core_vault: ~/ghostvault
+
+canvas_sync_protocol: manual
+default_chat_split_strategy: per-epic
+ritual_checkpoint_policy:
+  - export canvas
+  - finalize ghost_docs/
+  - start new chat thread
+  - attach canvas + docs as project files
+
+cli_scaffold_strategy: thin-shell
+ritual_module_protocol:
+  - write .md module
+  - create matching `system/*.py` if needed
+  - queue ritual for validation
