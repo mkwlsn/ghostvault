@@ -28,8 +28,13 @@ def log_ritual(summary):
 
 
 """ ghost really wanted this stubbed out, i dont think we need it, but the ghost insisted, idk """
-# def dispatch_module_task(task):
-#     for name, data in MODULES.items():
-#         if name.lower() in task.lower():
-#             print(f"🔁 matched task to module: {name}")
-#             return  # eventually call the module handler
+def dispatch_ritual(task: str):
+    from ghost_registry import MODULES  # symbolic index
+    for name, data in MODULES.items():
+        if name.lower() in task.lower():
+            print(f"🔮 matched ritual: {name}")
+            log_ritual(f"ran {name} for task: {task}")
+            # TODO: call actual handler or parse md steps
+            return
+    print(f"⚠️ no matching ritual found for: {task}")
+    log_event(f"unmatched ritual: {task}")
