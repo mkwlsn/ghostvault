@@ -126,10 +126,19 @@ git mv system/test_ghost.py ghost/tests/test_ghost.py
 
 # Step 8: Move documentation
 log_info "Moving internal docs..."
-git mv system/_docs/architecture.md ghost/docs/architecture.md
-git mv system/_docs/ghostOS_rules.md ghost/docs/ghostOS_rules.md
-git mv system/_docs/executor_rules.md ghost/docs/executor_rules.md
-git mv system/_docs/vaultGhost_rules.md ghost/docs/vaultGhost_rules.md
+# Move all markdown files from _docs to ghost/docs
+if [ -d "system/_docs" ]; then
+    for doc_file in system/_docs/*.md; do
+        if [ -f "$doc_file" ]; then
+            filename=$(basename "$doc_file")
+            git mv "$doc_file" "ghost/docs/$filename"
+            log_success "Moved $filename to ghost/docs/"
+        fi
+    done
+else
+    log_warning "system/_docs directory not found"
+    skipped+=("documentation files")
+fi
 
 # Step 9: Move .ghostproject config
 log_info "Moving .ghostproject config..."
@@ -393,7 +402,21 @@ elif [ -f "$local_bin/ghost" ]; then
     log_warning "Non-symlink ghost file exists at $local_bin/ghost - manual review needed"
     skipped+=("CLI symlink update - file conflict")
 else
-    log_info "No existing CLI symlink found - will be created by install process"
+    log_info "No existing CLI symlink found"
+    # Create symlink if ~/.local/bin exists or can be created
+    if [ -d "$local_bin" ] || mkdir -p "$local_bin" 2>/dev/null; then
+        ln -s "$(pwd)/ghost.py" "$local_bin/ghost"
+        log_success "Created new CLI symlink at $local_bin/ghost"
+        
+        # Check if ~/.local/bin is in PATH
+        if [[ ":$PATH:" != *":$local_bin:"* ]]; then
+            log_warning "$local_bin is not in your PATH"
+            log_info "Add this to your shell rc file: export PATH=\"\$HOME/.local/bin:\$PATH\""
+        fi
+    else
+        log_warning "Could not create $local_bin directory"
+        skipped+=("CLI symlink creation - directory creation failed")
+    fi
 fi
 
 # Step 19: Create new root CLI entry point
@@ -517,12 +540,21 @@ log_success "Enhanced validation completed"
 # Step 21: Run tests if they exist
 if [ -f "ghost/tests/test_ghost.py" ]; then
     log_info "Running tests..."
-    if python3 -m pytest ghost/tests/ -v; then
-        log_success "All tests passed"
+    # Check if pytest is available before trying to use it
+    if python3 -c "import pytest" 2>/dev/null; then
+        if python3 -m pytest ghost/tests/ -v; then
+            log_success "All tests passed"
+        else
+            log_warning "Some tests failed - manual review needed"
+            skipped+=("test suite validation")
+        fi
     else
-        log_warning "Some tests failed - manual review needed"
-        skipped+=("test suite validation")
+        log_warning "pytest not available - skipping test execution"
+        log_info "Install pytest with: pip install pytest"
+        skipped+=("test suite execution - pytest not installed")
     fi
+else
+    log_info "No test files found - skipping test execution"
 fi
 
 # Cleanup backup files
@@ -547,3 +579,76 @@ echo ""
 echo "🧪 Test the new structure:"
 echo "   python3 -c 'from ghost.core.config import VAULT; print(f\"Vault: {VAULT}\")'"
 echo "   python3 ghost.py --help"
+echo ""
+
+# Step 22: Check and activate virtual environment
+log_info "Checking virtual environment status..."
+if [ -n "$VIRTUAL_ENV" ]; then
+    log_success "Virtual environment is already active: $VIRTUAL_ENV"
+elif [ -d ".venv" ]; then
+    log_info "Virtual environment found but not active - activating..."
+    echo "→ Running: source .venv/bin/activate"
+    source .venv/bin/activate
+    if [ -n "$VIRTUAL_ENV" ]; then
+        log_success "Virtual environment activated: $VIRTUAL_ENV"
+    else
+        log_warning "Failed to activate virtual environment"
+        skipped+=("virtual environment activation")
+    fi
+else
+    log_warning "No virtual environment found (.venv directory missing)"
+    log_info "Create one with: python3 -m venv .venv && source .venv/bin/activate"
+    skipped+=("virtual environment activation - .venv not found")
+fi
+
+# Step 23: Test ghost commands if venv is active
+if [ -n "$VIRTUAL_ENV" ]; then
+    log_info "Testing ghost commands with active virtual environment..."
+    
+    # Test ghost status
+    echo "→ Running: ghost status"
+    if ghost status 2>/dev/null; then
+        log_success "ghost status command working"
+        
+        # Log ritual completion
+        echo "→ Running: ghost ritual \"✨restructure complete\""
+        if ghost ritual "✨restructure complete" 2>/dev/null; then
+            log_success "Logged restructure completion ritual"
+        else
+            log_warning "ghost ritual command failed - trying direct invocation"
+            echo "→ Running: python3 ghost.py ritual \"✨restructure complete\""
+            if python3 ghost.py ritual "✨restructure complete"; then
+                log_success "Logged restructure completion ritual (direct invocation)"
+            else
+                log_warning "Could not log completion ritual"
+                skipped+=("ritual logging")
+            fi
+        fi
+    else
+        log_warning "ghost status command failed - trying direct invocation"
+        echo "→ Running: python3 ghost.py status"
+        if python3 ghost.py status; then
+            log_success "Direct ghost.py status working"
+            echo "→ Running: python3 ghost.py ritual \"✨restructure complete\""
+            if python3 ghost.py ritual "✨restructure complete"; then
+                log_success "Logged restructure completion ritual (direct invocation)"
+            else
+                log_warning "Could not log completion ritual"
+                skipped+=("ritual logging")
+            fi
+        else
+            log_warning "Both ghost and python3 ghost.py commands failed"
+            skipped+=("ghost command testing")
+        fi
+    fi
+else
+    log_warning "Virtual environment not active - skipping ghost command tests"
+    skipped+=("ghost command testing - no active venv")
+fi
+
+echo ""
+echo "💡 If 'ghost' command doesn't work:"
+echo "   • Ensure ~/.local/bin is in your PATH"
+echo "   • Test symlink: ~/.local/bin/ghost --help"
+echo "   • Use direct: python3 ghost.py [command]"
+echo "   • Activate venv: source .venv/bin/activate"
