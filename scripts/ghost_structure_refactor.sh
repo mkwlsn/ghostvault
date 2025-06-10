@@ -396,9 +396,10 @@ if [ -f "ghost/core/daemon.py" ]; then
     sed -i.bak 's|open("ghostd.pid"|open(str(STATE_DIR / "daemon.pid")|g' ghost/core/daemon.py
     sed -i.bak 's|os.remove("ghostd.pid")|os.remove(str(STATE_DIR / "daemon.pid"))|g' ghost/core/daemon.py
     
-    # Add STATE_DIR import if not present
+    # Add STATE_DIR import if not present - fix the sed command
     if ! grep -q "STATE_DIR" ghost/core/daemon.py; then
-        sed -i.bak '1i from ghost.core.config import VAULT, STATE_DIR' ghost/core/daemon.py
+        sed -i.bak '1i\
+from ghost.core.config import VAULT, STATE_DIR' ghost/core/daemon.py
     fi
     
     log_success "Fixed daemon management paths and PID handling"
@@ -412,9 +413,10 @@ if [ -f "ghost/ghostd.py" ]; then
     sed -i.bak 's|"ghostd.pid"|STATE_DIR / "daemon.pid"|g' ghost/ghostd.py
     sed -i.bak 's|open("ghostd.pid"|open(str(STATE_DIR / "daemon.pid")|g' ghost/ghostd.py
     
-    # Add STATE_DIR import if not present
+    # Add STATE_DIR import if not present - fix the sed command
     if ! grep -q "STATE_DIR" ghost/ghostd.py; then
-        sed -i.bak '1i from ghost.core.config import STATE_DIR' ghost/ghostd.py
+        sed -i.bak '1i\
+from ghost.core.config import STATE_DIR' ghost/ghostd.py
     fi
     
     log_success "Fixed ghostd.py PID file handling"
