@@ -24,3 +24,4 @@
 - [ ] refine ghost gen prompt rituals with logic from executor_rules.md
 - [ ] improve ritual match strategy in dispatch_ritual()
 - [ ] move all path definitions to ghost_config.py before restructure merge
+- [ ] generate and run mv/git mv commands for restructure
