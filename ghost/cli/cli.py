@@ -95,6 +95,14 @@ def main():
             from ghost.core.daemon import status_ghostd
             status_ghostd()
 
+        case "init":
+            from ghost.cli.bootstrap import ghost_bootstrap_routine
+            ghost_bootstrap_routine("normie")
+        
+        case "cleanup":
+            from ghost.cli.cleanup import main as cleanup_main
+            cleanup_main()   
+        
         case _:
             print(f"❓ unknown command: {cmd}")
             show_help()

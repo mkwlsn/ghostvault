@@ -4,7 +4,7 @@ from datetime import datetime
 from ghost.core.config import VAULT, QUEUE_MD, QUEUE_MD
 
 def log_event(msg):
-    path = VAULT / "memory" / "events.md"
+    path = VAULT / "memory" / "events.md" #CONST-PATH
     with path.open("a") as f:
         f.write(f"- {datetime.today().date()} — {msg}\n")
     print(f"📝 log saved: {msg}")
@@ -17,7 +17,7 @@ def queue_task(task):
 
 def log_ritual(summary):
     date_str = datetime.today().strftime("%Y-%m-%d")
-    path = VAULT / "rituals" / f"daily-log-{date_str}.md"
+    path = VAULT / "rituals" / f"daily-log-{date_str}.md" #CONST-PATH
     header = f"# 🔁 ritual log — {date_str}\n\n"
     if not path.exists():
         path.write_text(header)
