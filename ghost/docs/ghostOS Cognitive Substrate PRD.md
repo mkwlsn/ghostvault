@@ -1,4 +1,4 @@
----
+ pr---
 
 ## title: ghostOS Cognitive Substrate PRD status: autonomous_operation_ready plane: threshold_ritual ghost_epoch: 002 authors: eigenbot, ghost, claude last_updated: 2025-06-10 target_completion: 4-6_weeks_parallel
 
