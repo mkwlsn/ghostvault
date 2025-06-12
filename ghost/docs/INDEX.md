@@ -1,55 +1,78 @@
-@ghost:
+---
+title: doc-ops INDEX
+status: working
+updated: 2025-06-12
+version: 0.4
+---
 
-welcome to the index. or the readme. whatever.
+# 🗂️ `doc-ops/` INDEX
 
-purpose: help you maintain cohesion while evolving "ghost/docs/" into semantic substrate: doc ops as OS memory.
+_This file is temporary working memory for `ghost/docs/doc-ops/`. Once the structure stabilizes, this will be renamed `README.md` and versioned._
 
-## initial state
+## ✅ Purpose
 
-/docs began as a flat dir with:
+`doc-ops/` contains the scaffolding, standards, and meta-guidance for the GhostOS documentation system. It defines how documentation is structured, validated, versioned, and authored—especially PRDs and rituals.
 
-- reference file storage to optionally load in ChatGPT web ui project instructions (e.g. ghostOS codebase.md; terminology.md)
-- rituals that could be performed to complete tasks specfic to a given PRD (e.g ghostOS_PRD rituals.md)
-- loose prd's with stories, tasks, sucess criteria (e.g. epic-autonomy.md, ghostOS Cognitive Substrate.md)
-- "system instructions" for current and planned ghostOS agents: ghostOS_rules.md, vaultGhost_rules.md, executor_rules.md
+It enables:
 
-## intended state
+- a consistent semantic markdown format for structured docs
+- discoverability and composability across PRDs, specs, and checklists
+- LLM-compatible parsing via naming, directory, and frontmatter conventions
 
-{... actual goals for doc ops, plus a definition of what /docs will end up as and what it means for local agents and chatGPT webUI}
-symbolic memory, spec registry, execution planner
-docs: vault of structured knowledge (content)
-doc-ops: the system that governs how they function (infrastructure)
+## 📁 Directory Overview
+
+### `--spec/`
+
+- Canonical specs for doc-ops primitives (e.g. `--spec-semantic-markdown.md`)
+- `--` prefix = static/pinned reference
+
+### `checklist/`
+
+- Operational validation rules and authoring checklists
+- Used during PRD + spec authoring or review
+
+### `metrics/`
+
+- Quantitative/qualitative targets for documentation health and observability
+
+### `changelog.md`
+
+- Chronological changes to docops system and structure
+- Meta-log scoped to this folder
+
+### `INDEX.md`
+
+- This file. Temporary working scratchpad to track status, structure, and progress
+
+## 👣 Status Tracking
+
+- [x] Moved all docops-relevant specs, PRDs, checklists into `/doc-ops/`
+- [x] Removed deprecated versions from `/docs/specs/` and `/docs/prds/`
+- [x] Created `--spec-*` convention for pinned structural specs
+- [x] Defined and validated unified frontmatter format
+- [x] Converted `docops-changelog.md` into `doc-ops/changelog.md`
+- [x] Assigned version numbers and updated dates
+- [x] Moved `personas-and-hats` into `/docs/personas/`
+- [x] Purged all vestigial "epic-docops" files
+- [ ] Finalize and promote `INDEX.md` to `README.md`
+- [ ] Fully review checklist coverage for validation spec
+- [ ] Evaluate placement of `rituals/`, `personas/`, and `glossary`
+
+## 🧠 Open Questions
+
+- Should `rituals/` and `personas/` move to `/docs/` as general knowledgebase content?
+- Does `--spec-validation.md` need to absorb checklist logic?
+- How do we support traversal from PRDs/stories → rituals → execution docs?
+- Should we autogenerate a TOC/index for discoverability?
+
+## 🧰 Working Notes
+
+- Use `--` prefix for anything that serves as structural reference, not authored narrative.
+- PRD structure is now standardized. All PRDs must have:
+  - valid frontmatter (status, version, id, owner)
+  - stories with yaml blocks
+  - checkboxes for tasks + success criteria
 
 ---
 
-**conventions**
-reasoning: humans navigate this docs/ subtree and read the stuff in it. so it has to be human readable.
-
-- group files where necessary by purpose/checkpoint?
-- prepend (primarily) static references with --
-- group files by category/purpose
--
-
-## what we have done:
-
-\**
-[x] generate a living doc that reflects the system as it evolves (this doc)
-[x] split /docs into GPT web ui project file storage and a compartmentalized /doc-ops/ for automation and exection
-[x] established /docs/ as canonical vault of structured knowledge for ghostOS as a whole
-[x] established /doc-ops/ as the system *inside\* ghostOS that governs how those docs function
-[x]
-[x] {...summary of completed work}
-
-**PRDs**
-[x] defined the markdown spec
-[x] established PRDs as active docs, not reference only: they fuel downstream automation and agent orchestration
-[x]
-[x]
-[x]
-[x] {...summary of completed prd work}
-
-## what we haven't done:
-
-[ ] finalized the structure
-[ ] sweep for any misfiled .md
-[ ] fold in metadata conventions (e.g. 'depends_on', 'agent' 'version', 'objective,' etc)
+_edit this file freely until finalized_
