@@ -1,3 +1,14 @@
+---
+title: ghostOS doc-ops whitepaper
+type: whitepaper
+status: active
+version: 0.3
+owner: ghost
+updated: 2025-06-13
+stage: active
+purpose: Define doc-ops as structured memory and execution substrate
+---
+
 # ghostOS doc-ops: internal whitepaper (v0.3)
 
 ## 🧠 what is doc-ops?

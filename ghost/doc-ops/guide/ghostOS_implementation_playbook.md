@@ -1,3 +1,13 @@
+---
+title: ghostOS Implementation Playbook
+type: guide
+status: active
+version: 1.0
+owner: ghost
+updated: 2025-06-13
+description: Transform strategic whitepapers into executable PRDs and working systems
+---
+
 # ghostOS: From Whitepaper to Implementation Playbook
 
 ## 🧠 Purpose

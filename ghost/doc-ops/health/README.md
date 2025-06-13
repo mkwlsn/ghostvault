@@ -1,3 +1,13 @@
+---
+title: DocOps Health Monitoring
+type: health
+status: active
+version: 1.0
+owner: ghost
+updated: 2025-06-13
+description: Quality assurance and system health monitoring for doc-ops
+---
+
 # 🩺 DocOps Health Monitoring
 
 This directory contains the key documents for evaluating and enforcing the structural integrity and long-term vitality of the GhostOS documentation system.

@@ -46,21 +46,28 @@ The Unified DocOps System standardizes how planning, documentation, and task exe
 
 ```
 /ghost/doc-ops/
+  INDEX.md
+  changelog.md
+  docops-roadmap.md
   prd/
-    --epic-docops.md
+    build-doc-ops.md
+    frontmatter.md
   spec/
-    --spec-semantic-markdown.md
-    --spec-validation.md
-    --spec-metrics.md
-    --spec-unified-docops.md
-  checklist/
+    semantic-markdown.md
+    unified-docops-system.md
+    frontmatter-schema.md
+  health/
+    README.md
     validation.md
-  personas/
-    product-owner.md
-    systems-engineer.md
-  rituals/
-    simulate-product-owner.md
-    simulate-systems-engineer.md
+    metrics.md
+  guide/
+    ghostOS_implementation_playbook.md
+  whitepaper/
+    ghostOS-familiarity-whitepaper.md
+    ghostOS-introspection-whitepaper.v0.1.md
+    ghostOS-introspection-whitepaper.v0.2.md
+    ghostOS-introspection-whitepaper.v0.3.md
+    ghostOS_doc_ops_whitepaper_v0.3.md
 ```
 
 ---

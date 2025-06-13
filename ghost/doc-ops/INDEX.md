@@ -1,13 +1,16 @@
 ---
-title: doc-ops INDEX
-status: working
+title: doc-ops Index
+type: index
+status: active
+version: 1.0
+owner: ghost
 updated: 2025-06-13
-version: 0.5
+description: Canonical directory map and status tracker for doc-ops files and system structure
 ---
 
 # 🗂️ `doc-ops/` INDEX
 
-_This file is temporary working memory for `ghost/docs/doc-ops/`. Once the structure stabilizes, this will be renamed `README.md` and versioned._
+_This file serves as the canonical index for all doc-ops artifacts. It replaces `--INDEX.md` and is now stable and versioned._
 
 ## ✅ Purpose
 
@@ -70,7 +73,6 @@ It enables:
 
 ## 🧰 Working Notes
 
-- Use `--` prefix for anything that serves as structural reference, not authored narrative.
 - PRD structure is now standardized. All PRDs must have:
   - valid frontmatter (status, version, id, owner)
   - stories with yaml blocks

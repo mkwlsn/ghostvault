@@ -1,8 +1,11 @@
 ---
 title: docops-changelog
+type: changelog
 version: 1.0
 status: active
 owner: ghost
+updated: 2025-06-13
+description: All notable changes to the GhostOS documentation system, including specs, PRDs, and infrastructure
 ---
 
 # 📓 DocOps Changelog
@@ -10,6 +13,14 @@ owner: ghost
 All notable changes to the semantic documentation system will be tracked in this file.
 
 ---
+
+## [2025-06-13] doc-ops system stabilized
+
+- Replaced outdated naming patterns (`--*.md`) with clean semantic filenames
+- Updated `INDEX.md`, directory tree, and internal references to match new structure
+- Added frontmatter to all previously missing files
+- Promoted INDEX to stable, versioned canonical index
+- Verified and cleaned references in spec/unified-docops-system.md
 
 ## [2025-06-12] semantic markdown PRD system v1.0
 
