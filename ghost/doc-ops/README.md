@@ -17,7 +17,7 @@ this guide explains:
 
 1. **what doc-ops enables** – rituals, personas, structured documentation, self-evaluation
 2. **how it enables it** – semantic markdown, scoped schemas, validation tools, roadmap scaffolding
-3. **why it matters to you** – because ghostOS reasons through documents. understanding doc-ops is how you understand _how it thinks_
+3. **why** – ghostOS reasons through documents. understanding doc-ops is how you understand _how it thinks_
 
 ---
 
