@@ -3,7 +3,7 @@ title: ghostOS Introspection Whitepaper
 status: draft
 version: 0.1
 stage: post-threshold
-date: 2025-06-13
+updated: 2025-06-13
 audience: internal
 purpose: >
   Define the introspection layer of ghostOS—how the system reflects on its own actions, maintains self-aware memory, and provides continuity across time for users and models.

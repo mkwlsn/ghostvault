@@ -3,7 +3,7 @@ title: ghostOS Familiarity Whitepaper
 status: draft
 audience: internal
 stage: post-threshold
-date: 2025-06-13
+updated: 2025-06-13
 ---
 
 ## Overview
