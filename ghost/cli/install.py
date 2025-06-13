@@ -63,7 +63,7 @@ def validate_package_structure():
         # Test critical imports
         from ghost.core.config import VAULT
         from ghost.core.runtime import log_event
-        from ghost.cli.cli import main
+        from ghost.cli.cmd import main
         print("✅ Package structure validated - imports working")
         return True
     except ImportError as e:
