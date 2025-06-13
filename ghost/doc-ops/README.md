@@ -9,65 +9,69 @@ tags: [docops, onboarding, learning-path, guide]
 
 # 📚 understanding doc-ops (the documentation system of ghostOS)
 
-ghostOS isn’t just code—it’s a system that documents, evaluates, and evolves itself.
+planning that validates itself. documentation that executes itself. memory that maintains itself.
 
-the `/doc-ops/` subsystem is how that happens.
+The `/doc-ops/` subsystem is how.
 
 this guide explains:
 
-1. **what doc-ops enables** – rituals, personas, structured documentation, self-evaluation  
-2. **how it enables it** – semantic markdown, scoped schemas, validation tools, roadmap scaffolding  
-3. **why it matters to you** – because ghostOS reasons through documents. understanding doc-ops is how you understand *how it thinks*
+1. **what doc-ops enables** – rituals, personas, structured documentation, self-evaluation
+2. **how it enables it** – semantic markdown, scoped schemas, validation tools, roadmap scaffolding
+3. **why it matters to you** – because ghostOS reasons through documents. understanding doc-ops is how you understand _how it thinks_
 
 ---
 
 ## 🧭 recommended reading path
 
-### 1. Start Here – Foundation (15 min)  
-*Begin with the what, why, and where.*
+### 1. Start Here – Foundation (15 min)
 
-- [📄 `INDEX.md`](./INDEX.md) — *Directory map + top-level orientation*
-- [📄 `unified-docops-system.md`](./spec/unified-docops-system.md) — *Why doc-ops exists and what it standardizes*
-- [📄 `changelog.md`](./changelog.md) — *Recent progress and structural evolution*
+_Begin with the what, why, and where._
 
----
-
-### 2. Core Concepts (20 min)  
-*Understand how ghostOS reads and reasons about documents.*
-
-- [📄 `semantic-markdown.md`](./spec/semantic-markdown.md) — *How markdown becomes executable knowledge*
-- [📄 `README.md`](./rituals/README.md) — *How rituals and personas evaluate documents*
-- [📄 `docops-roadmap.md`](./docops-roadmap.md) — *Phase-based plan for building and stabilizing doc-ops*
+- [📄 `INDEX.md`](./INDEX.md) — _Directory map + top-level orientation_
+- [📄 `unified-docops-system.md`](./spec/unified-docops-system.md) — _Why doc-ops exists and what it standardizes_
+- [📄 `changelog.md`](./changelog.md) — _Recent progress and structural evolution_
 
 ---
 
-### 3. Practical Understanding (25 min)  
-*See how it works in context.*
+### 2. Core Concepts (20 min)
 
-- [📄 `build-doc-ops.md`](./prd/build-doc-ops.md) — *A real PRD that walks through doc-ops implementation*
-- [📄 `product-owner.md` (persona)](./rituals/persona/product-owner.md) — *An example of role-based evaluation*
-- [📄 `product-owner.md` (procedure)](./rituals/procedure/product-owner.md) — *A procedural walk through a documentation task*
+_Understand how ghostOS reads and reasons about documents._
+
+- [📄 `semantic-markdown.md`](./spec/semantic-markdown.md) — _How markdown becomes executable knowledge_
+- [📄 `README.md`](./rituals/README.md) — _How rituals and personas evaluate documents_
+- [📄 `docops-roadmap.md`](./docops-roadmap.md) — _Phase-based plan for building and stabilizing doc-ops_
 
 ---
 
-### 4. Deep Dive (30 min)  
-*The system’s philosophy, implementation path, and QA layer.*
+### 3. Practical Understanding (25 min)
 
-- [📄 `ghostOS_doc_ops_whitepaper_v0.3.md`](./whitepaper/ghostOS_doc_ops_whitepaper_v0.3.md) — *Strategic vision + architectural foundation*
-- [📄 `validation.md`](./health/validation.md) — *QA model for semantic doc health*
-- [📄 `ghostOS_implementation_playbook.md`](./guide/ghostOS_implementation_playbook.md) — *How to deploy ghostOS in your own system*
+_See how it works in context._
+
+- [📄 `build-doc-ops.md`](./prd/build-doc-ops.md) — _A real PRD that walks through doc-ops implementation_
+- [📄 `product-owner.md` (persona)](./rituals/persona/product-owner.md) — _An example of role-based evaluation_
+- [📄 `product-owner.md` (procedure)](./rituals/procedure/product-owner.md) — _A procedural walk through a documentation task_
+
+---
+
+### 4. Deep Dive (30 min)
+
+_The system’s philosophy, implementation path, and QA layer._
+
+- [📄 `ghostOS_doc_ops_whitepaper_v0.3.md`](./whitepaper/ghostOS_doc_ops_whitepaper_v0.3.md) — _Strategic vision + architectural foundation_
+- [📄 `validation.md`](./health/validation.md) — _QA model for semantic doc health_
+- [📄 `ghostOS_implementation_playbook.md`](./guide/ghostOS_implementation_playbook.md) — _How to deploy ghostOS in your own system_
 
 ---
 
 ## 🎯 Quick Navigation by Intent
 
-| If you want to...                     | Read this                                      |
-|--------------------------------------|------------------------------------------------|
-| Understand what doc-ops *is*         | [`unified-docops-system.md`](./spec/unified-docops-system.md) |
-| See how it's implemented             | [`build-doc-ops.md`](./prd/build-doc-ops.md)   |
-| Learn how it evaluates documents     | [`README.md`](./rituals/README.md)             |
-| Understand system health + QA        | [`validation.md`](./health/validation.md)      |
-| See where it’s going next            | [`docops-roadmap.md`](./docops-roadmap.md)     |
+| If you want to...                | Read this                                                     |
+| -------------------------------- | ------------------------------------------------------------- |
+| Understand what doc-ops _is_     | [`unified-docops-system.md`](./spec/unified-docops-system.md) |
+| See how it's implemented         | [`build-doc-ops.md`](./prd/build-doc-ops.md)                  |
+| Learn how it evaluates documents | [`README.md`](./rituals/README.md)                            |
+| Understand system health + QA    | [`validation.md`](./health/validation.md)                     |
+| See where it’s going next        | [`docops-roadmap.md`](./docops-roadmap.md)                    |
 
 ---
 
