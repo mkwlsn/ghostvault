@@ -18,3 +18,10 @@
 - 2025-06-09 — Modular cleanup: deleted old stub, unified pathlib usage, routed symbolic execution through dispatch_ritual
 - 2025-06-09 — System code reorganized into ghost/brain structure. .ghostproject moved to root. Ready to execute file moves.
 - 2025-06-13 — Test event log
+- 2025-06-13 — 📚 doc-ops structure stabilized and schema enforced
+- 2025-06-13 — Removed legacy CLI files (cli.py, ghost.py); migrated to cmd.py + haunt.py
+- 2025-06-13 — Stubbed ghost validate, migrate, and evaluate commands
+- 2025-06-13 — Created frontmatter-schema.md and aligned with frontmatter PRD
+- 2025-06-13 — Validated semantic markdown structure across all doc-ops files
+- 2025-06-13 — Patched INDEX.md to reflect new file structure, naming, and open questions
+- 2025-06-13 — Marked frontmatter.md todos as complete and promoted checklist structure
