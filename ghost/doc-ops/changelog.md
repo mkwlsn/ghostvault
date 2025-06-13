@@ -16,6 +16,11 @@ All notable changes to the semantic documentation system will be tracked in this
 
 ## [2025-06-13] doc-ops system stabilized
 
+- Created narrative onboarding doc at `doc-ops/README.md` to guide new contributors
+- Clarified purpose of `INDEX.md` as structural map, not onboarding path
+- Linked `README.md` from `INDEX.md` as recommended starting point
+- Finalized and documented reading path for core spec, roadmap, and rituals
+
 - Replaced outdated naming patterns (`--*.md`) with clean semantic filenames
 - Updated `INDEX.md`, directory tree, and internal references to match new structure
 - Added frontmatter to all previously missing files
