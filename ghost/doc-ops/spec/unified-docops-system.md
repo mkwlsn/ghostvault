@@ -4,7 +4,7 @@ version: 1.1
 status: stable
 owner: mike
 description: unified documentation and planning system for ghostOS development
-date: 2025-06-12
+updated: 2025-06-12
 ---
 
 # 📘 Unified DocOps System

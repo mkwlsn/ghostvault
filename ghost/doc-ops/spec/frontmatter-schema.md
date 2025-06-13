@@ -2,7 +2,7 @@
 title: Frontmatter Schema
 type: spec
 status: stable
-version: 1.0
+version: 1.1
 owner: ghost
 updated: 2025-06-13
 invokes: ghost validate frontmatter
@@ -51,6 +51,10 @@ This document defines the canonical frontmatter structure for all documentation 
 - `purpose`: strategic objective
 - `supersedes`: ID of document replaced
 
+### For Personas
+
+- `mode`: either `symbolic` (conceptual anchor) or `operational` (used in simulation)
+
 ---
 
 ## 🔒 Validation Rules
@@ -60,6 +64,7 @@ This document defines the canonical frontmatter structure for all documentation 
 - `version` must be semver format
 - `updated` must use YYYY-MM-DD
 - `type` must match directory context
+- `mode` is required for `type: persona` and must be either `symbolic` or `operational`
 
 ---
 

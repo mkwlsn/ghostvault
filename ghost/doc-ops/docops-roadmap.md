@@ -16,7 +16,7 @@ Outlines the design, buildout, and execution sequence for the semantic documenta
 ## ✅ Phase 1 — Bootstrap (COMPLETE)
 
 - [x] Defined semantic markdown PRD spec (v1.0)
-- [x] Authored `epic-docops.md` with scoped roadmap + stories
+- [x] Authored `build-docops.md` with scoped roadmap + stories
 - [x] Created canonical persona definitions for simulation
 - [x] Exported ritual stubs for core planning affordances
 - [x] Initialized `/ghost/doc-ops/` as system runtime surface
@@ -27,7 +27,7 @@ Outlines the design, buildout, and execution sequence for the semantic documenta
 ## 🔄 Phase 2 — Runtime Integration (ACTIVE)
 
 - [ ] Migrate all PRDs into `/ghost/doc-ops/prd/` with canonical frontmatter
-- [ ] Relocate spec to `/ghost/doc-ops/spec/semantic-prd.md`
+- [ ] Relocate spec to `/ghost/doc-ops/spec/semantic-markdown.md`
 - [ ] Scaffold `/ghost/doc-ops/schema/types.yaml` for validation engine
 - [ ] Patch ghost CLI with `ghost plan`, `ghost simulate`, `ghost evaluate`
 - [ ] Enable bundling logic for epics, stories, and tasks
