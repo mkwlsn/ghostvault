@@ -1,8 +1,12 @@
 ---
-title: ritual-product-philosopher
+title: Product Philosopher
+type: procedure
 status: stable
 version: 1.0
+owner: ghostOS-core
+updated: 2025-06-13
 tags: [persona, docops, vision]
+description: Interrogates the essence, telos, and broader implications of proposed work
 ---
 
 # 🧠 Ritual: Product Philosopher

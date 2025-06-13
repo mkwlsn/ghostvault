@@ -1,10 +1,13 @@
 ---
 title: Systems Philosopher Persona
 id: persona-systems-philosopher
-version: 1.0
-role: systems-thinker
+type: persona
+mode: symbolic
 status: active
+version: 1.1
 owner: ghostOS-core
+updated: 2025-06-13
+description: Frames the metaphysical and symbolic architecture of GhostOS; maintains system soul and semiotic integrity without direct simulation
 ---
 
 # Persona: Systems Philosopher
@@ -62,5 +65,4 @@ They are responsible for holding space for long-range questions about identity, 
 
 ## Notes
 
-The Systems Philosopher isn’t here to make things clearer—they’re here to make sure it *means something*.
-
+The Systems Philosopher isn’t here to make things clearer—they’re here to make sure it _means something_.

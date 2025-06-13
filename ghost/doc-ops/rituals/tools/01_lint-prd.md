@@ -1,9 +1,13 @@
 ---
 title: PRD Linter
+type: tool
 id: wishlist-001
 status: wishlist
+version: 0.1
 owner: ghostOS
+updated: 2025-06-13
 tags: [linting, validation, spec-compliance]
+description: CLI tool to validate PRD structural compliance and formatting
 ---
 
 # 🎯 Purpose

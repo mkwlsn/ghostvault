@@ -1,9 +1,13 @@
 ---
 title: Emit JSON for Linear
+type: tool
 id: wishlist-003
 status: wishlist
+version: 0.1
 owner: ghostOS
+updated: 2025-06-13
 tags: [linear, json, integration, export]
+description: Export PRD stories and tasks to Linear-compatible JSON format
 ---
 
 # 🎯 Purpose

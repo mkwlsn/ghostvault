@@ -1,11 +1,11 @@
 ---
 title: Personas and Hats
+type: persona
 version: 1.0
 status: active
 owner: mike
-description: |
-  Defines the core evaluative lenses (personas and hats) used to guide and assess development and design work within GhostOS. This serves both LLM agents and human collaborators in aligning goals, priorities, and evaluation metrics across contexts.
-date: 2025-06-12
+updated: 2025-06-13
+description: Defines the core evaluative lenses (personas and hats) used to guide and assess development and design work within GhostOS
 ---
 
 # 🧠 Personas and Hats

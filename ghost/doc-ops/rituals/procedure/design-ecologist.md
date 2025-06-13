@@ -1,8 +1,12 @@
 ---
-title: ritual-design-ecologist
+title: Design Ecologist
+type: procedure
 status: stable
 version: 1.0
+owner: ghostOS-core
+updated: 2025-06-13
 tags: [persona, docops, design, system]
+description: Evaluates design-system and affordance-level consequences of infrastructure decisions
 ---
 
 # 🌱 Ritual: Design Ecologist

@@ -1,9 +1,13 @@
 ---
 title: Ghost Scribe CLI Scaffolder
+type: tool
 id: wishlist-005
 status: wishlist
+version: 0.1
 owner: ghostOS
+updated: 2025-06-13
 tags: [cli, ritual, scaffolding]
+description: Automated documentation generation and maintenance CLI tool
 ---
 
 # 🎯 Purpose

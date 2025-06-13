@@ -1,9 +1,13 @@
 ---
 title: Meta-Persona Reviewer
+type: tool
 id: wishlist-004
 status: wishlist
+version: 0.1
 owner: ghostOS
+updated: 2025-06-13
 tags: [persona, planning, validation, AI]
+description: Run persona-based review simulations on PRDs and stories
 ---
 
 # 🎯 Purpose

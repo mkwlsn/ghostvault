@@ -2,7 +2,7 @@
 title: metrics
 type: metric-schema
 version: 1.3
-status: evolving
+status: active
 updated: 2025-06-13
 owner: ghost
 audience: [strategist, operator, ghost]

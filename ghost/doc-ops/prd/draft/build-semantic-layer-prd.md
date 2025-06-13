@@ -1,10 +1,11 @@
 ---
-title: epic-semantic-layer
-epic_id: semantic-001
-status: active
-version: 1.0
+title: semantic-layer
+type: prd
+status: draft
+version: 0.2
 owner: mike
-threshold: false
+updated: 2025-06-13
+description: Implements a bidirectional semantic aliasing system for ghostOS CLI and ritual commands, including BabelFish-style developer workflows
 ---
 
 # Epic: Semantic Layer

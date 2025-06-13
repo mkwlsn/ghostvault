@@ -1,9 +1,13 @@
 ---
 title: Plaintext to PRD Generator
+type: tool
 id: wishlist-002
 status: wishlist
+version: 0.1
 owner: ghostOS
+updated: 2025-06-13
 tags: [conversion, formatting, draft-to-prd]
+description: Convert plaintext descriptions into structured semantic PRDs
 ---
 
 # 🎯 Purpose

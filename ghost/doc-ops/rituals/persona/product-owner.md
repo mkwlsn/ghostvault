@@ -1,8 +1,12 @@
 ---
-title: persona-product-owner
+title: Product Owner
+type: persona
+mode: operational
 version: 1.0
 status: active
-role: product_owner
+owner: ghostOS-core
+updated: 2025-06-13
+description: Represents user value in delivery decisions, balances constraints and outcomes
 ---
 
 # 👤 Persona: Product Owner

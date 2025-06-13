@@ -1,8 +1,12 @@
 ---
-title: ritual-systems-engineer
+title: Systems Engineer
+type: procedure
 status: stable
 version: 1.0
+owner: ghostOS-core
+updated: 2025-06-13
 tags: [persona, docops, technical-evaluation]
+description: Assesses technical feasibility, interdependencies, and implementation integrity
 ---
 
 # ⚙️ Ritual: Systems Engineer

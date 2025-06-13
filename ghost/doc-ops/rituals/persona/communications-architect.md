@@ -1,9 +1,13 @@
 ---
-title: persona-communications-architect
-persona_id: comms-001
+title: Communications Architect
+id: persona-communications-architect
+type: persona
+mode: operational
 status: active
 version: 1.0
-owner: ghostOS
+owner: ghostOS-core
+updated: 2025-06-13
+description: Ensures clear communication and documentation standards across all system interfaces and user touchpoints
 ---
 
 # Persona: Communications Architect

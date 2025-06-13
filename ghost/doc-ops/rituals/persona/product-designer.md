@@ -1,8 +1,13 @@
 ---
-title: persona-product-designer
-status: draft
-version: 0.1
-owner: ghost
+title: Product Designer
+id: persona-product-designer
+type: persona
+mode: symbolic
+status: active
+version: 1.0
+owner: ghostOS-core
+updated: 2025-06-13
+description: Balances system affordances with human intuition, shaping user perception of control and clarity
 ---
 
 # Persona: Product Designer

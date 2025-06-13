@@ -1,0 +1,78 @@
+---
+title: audit-persona
+type: tool
+status: active
+version: 1.0
+owner: ghost
+updated: 2025-06-13
+description: Validates the persona-procedure structure in rituals by ensuring symbolic or operational mode is defined and that simulation requirements are met for operational roles.
+---
+
+# 🕵️‍♂️ Tool: Audit Persona Definitions
+
+This tool verifies that all persona definitions in the GhostOS ritual system meet the structural and symbolic requirements for proper CLI resolution and simulation behavior.
+
+---
+
+## ✅ Validation Checklist
+
+For each file in `/rituals/personas/`:
+
+- [ ] Has valid frontmatter block
+- [ ] Includes required fields: `title`, `type`, `mode`, `status`, `version`, `updated`
+- [ ] `type` is `persona`
+- [ ] `mode` is one of: `symbolic`, `operational`
+
+For each `mode`:
+
+### If `mode: operational`
+
+- [ ] There is a corresponding procedure file in `/rituals/procedures/`
+- [ ] Filename matches the persona slug (e.g. `systems-engineer.md`)
+
+### If `mode: symbolic`
+
+- [ ] No procedure required
+- [ ] Persona is referenced in system architecture (optional check)
+
+---
+
+## 🧪 Output Behavior
+
+- Logs each persona with `OK ✅` or `Error ❌`
+- For any `mode: operational` personas without a matching procedure, throws:
+
+  ```
+  [ERROR] Persona 'X' has no matching procedure. Consider stubbing or deleting.
+  ```
+
+- For any persona without `mode`, throws:
+  ```
+  [ERROR] Persona 'X' missing 'mode' field. Add 'symbolic' or 'operational' to frontmatter.
+  ```
+
+---
+
+## 🧭 Usage
+
+Intended for:
+
+- `ghost validate rituals`
+- CLI rituals audit flows
+- Contributor checks during doc-ops hygiene passes
+
+---
+
+## 🔗 Related
+
+- `rituals/personas/README.md`
+- `frontmatter-schema.md`
+- `ghost simulate`, `ghost list`, `ghost validate`
+
+---
+
+## 📌 Notes
+
+- This tool is not a simulation—it does not model persona behavior
+- It reinforces semantic coherence across persona structure
+- Symbolic personas are allowed and valuable, but must be declared
