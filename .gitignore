@@ -38,5 +38,8 @@ Thumbs.db
 wils/
 
 # Archive and tmp directories - runtime behavior analysis cleanup
-tmp/
 .archive/
+.quarantine/
+
+# Project instructions - local only
+CLAUDE.md
