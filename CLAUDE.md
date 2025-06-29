@@ -2,9 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Current Project Phase: Kernel Rebuild
+## Current Project Phase: Kernel Development
 
-**Status:** Building minimal execution kernel from 12 salvaged files in `/tmp/`
+**Status:** ghostOS-kernel v0.1 foundation complete, building execution features
+**Completed:** Issue #4 (dependencies), Issue #5 (daemon loop)
 **Goal:** Flat, observable, testable automation substrate  
 **Anti-Goals:** Symbolic layers, ritual execution, persona systems
 
@@ -43,6 +44,12 @@ ghost/
 No code may be preserved from ghostOS-v0 unless:
 - It is explicitly referenced by an active GitHub issue, OR
 - It is accompanied by a `[v0_carryforward]` tag and justification
+
+**🔒 Import Discipline:**
+- Only import modules explicitly required by current implementation
+- Test that removing each import doesn't break functionality  
+- No "defensive imports" for anticipated future use
+- Remove unused imports immediately when discovered
 
 ## Build Order (LOCKED CONSTRAINTS)
 
@@ -97,9 +104,9 @@ daemon_running = check_process_status()  # literal function name
 
 **Observable State Requirement:**
 Every issue that changes behavior must reference:
-- **Before state:** `python tmp/daemon.py` → `ImportError: No module named 'psutil'`
-- **After state:** `python tmp/daemon.py` → `[daemon] scanning queue every 5s`  
-- **Observation method:** `tail -f tmp/events.md` shows daemon startup log
+- **Before state:** `python ghost/daemon/daemon.py` → `ImportError: No module named 'psutil'`
+- **After state:** `python ghost/daemon/daemon.py` → `[daemon] scanning queue every 5s`  
+- **Observation method:** `tail -f ghost/logs/events.md` shows daemon startup log
 
 **Exception for cosmetic changes:**
 - Tag the file and line
@@ -115,8 +122,14 @@ Body:
 3. Proposed action
 4. Related constraints or specs (if any)
 
-Labels: [claude, ghostOS-kernel]
+Labels: [ghostOS-kernel, execution, etc.]
 ```
+
+**Commit Message Discipline:**
+- Keep total message under 5 lines maximum
+- Use `type: brief description` format (feat, fix, docs, refactor)
+- Bullet points for multiple changes, not paragraphs
+- No changelog-style explanations in commit messages
 
 ## Development Guidelines
 
@@ -137,17 +150,17 @@ Labels: [claude, ghostOS-kernel]
 
 **Path Configuration:**
 ```bash
-python -c "import sys; sys.path.append('tmp'); from config import VAULT; print(VAULT)"
+python -c "import sys; sys.path.append('ghost'); from config.config import VAULT; print(VAULT)"
 ```
 
 **Queue Validation:**
 ```bash
-jq . tmp/queue.json
+jq . ghost/queue/queue.json
 ```
 
 **Event Log Monitoring:**
 ```bash
-tail -f tmp/events.md
+tail -f ghost/logs/events.md
 ```
 
 *Note: Additional CLI flags shown are placeholders—implement only after core daemon functionality is proven.*
@@ -166,15 +179,22 @@ tail -f tmp/events.md
 - Success/failure recorded in structured format
 - No hidden state or implicit behavior
 
+**🔒 State Transition Discipline:**
+- All status changes must be atomic (temp file → move pattern)
+- Log every transition with timestamp and task ID
+- Define valid states upfront, no implicit transitions
+- Use structured logging format for machine parsing
+
 ## Known Failure Modes from ghostOS-v0
 
 Mitigated by current constraints—must remain under test:
 
 - **Path confusion** - Legacy `/system/` vs `/ghost/` references
-- **Dependency gaps** - Missing `psutil` breaking daemon functions
-- **Import inconsistencies** - Circular dependencies in nested structure
+- ~~**Dependency gaps** - Missing `psutil` breaking daemon functions~~ RESOLVED
+- **Import inconsistencies** - Circular dependencies in nested structure  
 - **Symbolic execution without runtime behavior** - Markdown "modules" with no execution hooks
 - **Token overhead** - Symbolic language preventing small model compatibility
+- **Unused imports from v0 residue** - Defensive imports not required by implementation
 
 ## Important Context
 
