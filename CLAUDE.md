@@ -16,8 +16,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ghost/
 ├── daemon/              # Daemon runtime + loop
 │   └── daemon.py
-├── queue/               # Task queue and helpers  
-│   └── queue.json
+├── task_queue/          # Task queue and helpers  
+│   ├── queue.json
+│   ├── schema.json
+│   └── queue_ops.py
 ├── logs/                # Event logs (flat, timestamped)
 │   └── events.md
 ├── config/              # Path and runtime constants
@@ -130,6 +132,11 @@ Labels: [ghostOS-kernel, execution, etc.]
 - Use `type: brief description` format (feat, fix, docs, refactor)
 - Bullet points for multiple changes, not paragraphs
 - No changelog-style explanations in commit messages
+
+**Issue Management:**
+- Close completed issues immediately after committing fixes
+- Reference commit hash when closing: `gh issue close N --comment "Completed in commit abc1234"`
+- Check for stale open issues before starting new work
 
 ## Development Guidelines
 
