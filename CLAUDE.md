@@ -8,10 +8,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Goal:** Flat, observable, testable automation substrate  
 **Anti-Goals:** Symbolic layers, ritual execution, persona systems
 
-**Salvaged Files:**
-- **Runtime (8):** `config.py`, `daemon.py`, `cmd.py`, `queue.py`, `daemon.pid`, `queue.json`, `events.md`, plus old `CLAUDE.md` (to be replaced)
-- **Constraints (4):** `frontmatter-schema.md`, `semantic-markdown.md`, `validation.md`, `ghostOS_implementation_playbook.md`
-- **Strategy (3):** `why_roll_our_own.md`, `flattening-ghostlang.md`, `concept_salvage_list.md`
+## ghostOS-kernel Directory Structure (ENFORCED)
+
+**Modular Layout:**
+```
+ghost/
+├── daemon/              # Daemon runtime + loop
+│   └── daemon.py
+├── queue/               # Task queue and helpers  
+│   └── queue.json
+├── logs/                # Event logs (flat, timestamped)
+│   └── events.md
+├── config/              # Path and runtime constants
+│   └── config.py
+├── cli/                 # CLI entrypoint and helpers
+│   └── cli.py
+├── tests/               # Tests per issue (observable behavior only)
+│   └── test_dependencies.py
+```
+
+**Constraints:**
+- **NO** symbolic directories or runtime in project root
+- **NO** unresolved tmp/ references in production code  
+- **USE** relative imports within ghost/ modules
+- **KEEP** flat but organized structure (no deep nesting)
 
 ## Build Order (LOCKED CONSTRAINTS)
 
