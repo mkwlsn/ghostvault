@@ -33,6 +33,12 @@ ghost/
 - **USE** relative imports within ghost/ modules
 - **KEEP** flat but organized structure (no deep nesting)
 
+**Development Principle: Build New, Don't Migrate**
+- Create fresh module stubs for each component
+- Copy only validated logic from legacy files
+- Delete functions/references not covered by current issues
+- Treat kernel as new OS build, not refactor of old system
+
 ## Build Order (LOCKED CONSTRAINTS)
 
 **Priority Sequence:**
@@ -56,6 +62,17 @@ ghost/
 - **AVOID** in user-facing surfaces and execution logic
 - **OK** in comments/variables if marked as symbolic/narrative reference
 - **NEVER** encode personas, rituals, or recursive symbolic links into active logic
+
+**Approved Symbolic Terms (from flattening position paper):**
+- `ghost` — the system  
+- `vault` — persistent memory  
+- `ritual` — structured task  
+- `daemon` — background worker  
+- `daemon state` — status snapshot  
+- `chunk` — input unit  
+- `schema` — structure definition
+
+All other symbolic terms must be flattened, archived, or aliased.
 
 **LLM Alignment Constraint:**
 Every command, queue entry, and log line must be parseable by a 1B model using stateless context.
