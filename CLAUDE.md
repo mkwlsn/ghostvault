@@ -39,6 +39,11 @@ ghost/
 - Delete functions/references not covered by current issues
 - Treat kernel as new OS build, not refactor of old system
 
+**🔒 Dependency Constraint Rule:**
+No code may be preserved from ghostOS-v0 unless:
+- It is explicitly referenced by an active GitHub issue, OR
+- It is accompanied by a `[v0_carryforward]` tag and justification
+
 ## Build Order (LOCKED CONSTRAINTS)
 
 **Priority Sequence:**

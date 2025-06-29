@@ -8,15 +8,6 @@ import json
 import subprocess
 from pathlib import Path
 
-# Check psutil dependency - graceful failure
-try:
-    import psutil
-    PSUTIL_AVAILABLE = True
-except ImportError:
-    print("❌ Error: psutil dependency missing")
-    print("💡 Install with: pip install psutil")
-    PSUTIL_AVAILABLE = False
-
 # Import kernel config
 sys.path.insert(0, str(Path(__file__).parent.parent))
 try:
@@ -124,10 +115,6 @@ def daemon_loop():
 
 def main():
     """Entry point for daemon execution"""
-    if not PSUTIL_AVAILABLE:
-        print("❌ Cannot start daemon without psutil dependency")
-        sys.exit(1)
-        
     daemon_loop()
 
 if __name__ == "__main__":

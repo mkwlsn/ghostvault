@@ -9,9 +9,8 @@ from pathlib import Path
 # Add ghost root for imports
 sys.path.insert(0, str(Path(__file__).parent / "ghost"))
 
-# Mock psutil availability for testing
+# Import clean daemon module (no psutil dependency)
 import daemon.daemon as daemon_module
-daemon_module.PSUTIL_AVAILABLE = True
 
 def test_daemon_execution():
     """Test that daemon can execute a simple task"""
