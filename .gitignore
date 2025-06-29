@@ -1,0 +1,45 @@
+memory/fragments.json
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.ghostenv
+
+# VSCode
+.vscode/
+
+# Obsidian
+.obsidian/
+
+# Test artifacts
+*.tmp
+*.log
+ghost.tmp
+ghostvault_tree.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# private
+wils/
+
+# Archive and tmp directories - runtime behavior analysis cleanup
+.archive/
+.quarantine/
+
+# Project instructions - local only
+CLAUDE.md
