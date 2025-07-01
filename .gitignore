@@ -35,7 +35,9 @@ ghostvault_tree.md
 Thumbs.db
 
 # private
-wils/
+_arc/
+arcana/
+idd/
 
 # Archive and tmp directories - runtime behavior analysis cleanup
 .archive/
