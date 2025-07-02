@@ -1,0 +1,8 @@
+chain_id: test-001
+timestamp: 2025-07-01T18:26:03Z
+status: complete
+rituals:
+  - name: file_write
+    status: success
+    path: "test-output.txt"
+    bytes_written: 17

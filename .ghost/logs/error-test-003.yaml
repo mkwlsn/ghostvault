@@ -1,0 +1,7 @@
+chain_id: error-test-003
+timestamp: 2025-07-01T18:26:34Z
+status: failed
+rituals:
+  - name: unknown_ritual
+    status: failed
+    error: "Unknown ritual type: unknown_ritual"

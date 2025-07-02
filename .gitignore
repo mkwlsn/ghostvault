@@ -46,3 +46,4 @@ idd/
 
 # Project instructions - local only
 CLAUDE.md
+.claude/

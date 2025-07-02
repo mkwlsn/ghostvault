@@ -1,0 +1,14 @@
+chain_id: test-002
+timestamp: 2025-07-01T18:26:03Z
+status: complete
+rituals:
+  - name: mkdir
+    status: success
+    path: "test-dir"
+  - name: file_write
+    status: success
+    path: "test-dir/nested.txt"
+    bytes_written: 19
+  - name: echo
+    status: success
+    message: "Multi-ritual test complete!"

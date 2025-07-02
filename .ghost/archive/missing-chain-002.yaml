@@ -1,0 +1,6 @@
+ritual_proposal:
+  rituals:
+    - name: "echo"
+      args:
+        message: "Missing chain_id"
+  reasoning: "Test missing chain_id"

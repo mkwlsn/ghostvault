@@ -1,0 +1,7 @@
+ritual_proposal:
+  chain_id: "error-test-003"
+  rituals:
+    - name: "unknown_ritual"
+      args:
+        some_arg: "value"
+  reasoning: "Test unknown ritual"

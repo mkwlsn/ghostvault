@@ -1,0 +1,14 @@
+ritual_proposal:
+  chain_id: "test-002"
+  rituals:
+    - name: "mkdir"
+      args:
+        path: "./test-dir"
+    - name: "file_write"
+      args:
+        path: "./test-dir/nested.txt"
+        content: "Nested file content"
+    - name: "echo"
+      args:
+        message: "Multi-ritual test complete!"
+  reasoning: "Multi-ritual test"

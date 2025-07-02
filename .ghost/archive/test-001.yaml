@@ -1,0 +1,8 @@
+ritual_proposal:
+  chain_id: "test-001"
+  rituals:
+    - name: "file_write"
+      args:
+        path: "./test-output.txt"
+        content: "Hello from ghostd"
+  reasoning: "Basic test file"
