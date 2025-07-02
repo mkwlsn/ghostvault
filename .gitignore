@@ -29,6 +29,7 @@ env/
 *.log
 ghost.tmp
 ghostvault_tree.md
+scratch/
 
 # OS
 .DS_Store
