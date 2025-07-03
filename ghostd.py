@@ -14,6 +14,107 @@ from pathlib import Path
 import shutil
 import argparse
 import re
+import select
+import signal
+import time
+
+# Global flag for graceful shutdown
+shutdown_requested = False
+
+def signal_handler(signum, frame):
+    """Handle shutdown signals gracefully."""
+    global shutdown_requested
+    print(f"\nReceived signal {signum}, shutting down gracefully...")
+    shutdown_requested = True
+
+def setup_signal_handlers():
+    """Setup signal handlers for graceful shutdown."""
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+def setup_file_watching(watch_dir):
+    """Setup file watching (cross-platform polling approach)."""
+    # For cross-platform compatibility, we'll use polling
+    # TODO: Add proper inotify (Linux) and kqueue (macOS) support later
+    if not watch_dir.exists():
+        print(f"Error: Watch directory {watch_dir} does not exist")
+        return None
+    
+    # Track initial state
+    initial_files = set()
+    for file_path in watch_dir.iterdir():
+        if file_path.is_file() and file_path.suffix.lower() in ['.yaml', '.yml']:
+            initial_files.add(file_path.name)
+    
+    return {'initial_files': initial_files, 'watch_dir': watch_dir}
+
+def check_for_new_files(watch_state, verbose=False):
+    """Check for new YAML files using polling approach."""
+    if not watch_state:
+        return []
+    
+    watch_dir = watch_state['watch_dir']
+    initial_files = watch_state['initial_files']
+    
+    # Check current files
+    current_files = set()
+    for file_path in watch_dir.iterdir():
+        if file_path.is_file() and file_path.suffix.lower() in ['.yaml', '.yml']:
+            current_files.add(file_path.name)
+    
+    # Find new files
+    new_file_names = current_files - initial_files
+    new_files = []
+    
+    for name in new_file_names:
+        file_path = watch_dir / name
+        if file_path.exists():
+            new_files.append(file_path)
+            if verbose:
+                print(f"Detected new file: {name}")
+    
+    # Update tracking
+    watch_state['initial_files'] = current_files
+    
+    return new_files
+
+def watch_mode(output_dir, verbose=False):
+    """Run in watch mode - continuously monitor for new files."""
+    if verbose:
+        print(f"Starting watch mode on {output_dir}")
+        print("Using polling approach (cross-platform compatible)")
+    
+    setup_signal_handlers()
+    
+    # Setup file watching
+    watch_state = setup_file_watching(output_dir)
+    if watch_state is None:
+        print("Failed to setup file watching")
+        return False
+    
+    if verbose:
+        print("File watching active. Press Ctrl+C to stop.")
+    
+    try:
+        while not shutdown_requested:
+            new_files = check_for_new_files(watch_state, verbose)
+            
+            for yaml_file in new_files:
+                if verbose:
+                    print(f"Processing detected file: {yaml_file.name}")
+                # Process the file using the same pipeline as batch mode
+                process_single_file(yaml_file, verbose)
+            
+            # Sleep briefly to avoid excessive CPU usage
+            time.sleep(0.5)
+    
+    except KeyboardInterrupt:
+        pass
+    finally:
+        if verbose:
+            print("Watch mode stopped.")
+    
+    return True
 
 
 def parse_simple_yaml(content):
@@ -307,13 +408,87 @@ def update_context(chain_id, status, results):
     return context_file
 
 
+def process_single_file(yaml_file, verbose=False):
+    """Process a single YAML file through the complete pipeline."""
+    try:
+        if verbose:
+            print(f"Processing {yaml_file.name}...")
+        
+        proposal = load_ritual_proposal(yaml_file)
+        if verbose:
+            print(f"  Chain ID: {proposal['chain_id']}")
+            print(f"  Rituals: {len(proposal['rituals'])}")
+        
+        # Execute the rituals
+        results = execute_rituals(proposal['rituals'])
+        
+        # Create and write log entry
+        log_entry = create_log_entry(proposal['chain_id'], proposal, results)
+        log_file = write_log_entry(log_entry)
+        
+        # Move processed file to archive
+        archive_path = archive_processed_file(yaml_file)
+        
+        # Update context with execution summary
+        context_file = update_context(proposal['chain_id'], log_entry['status'], results)
+        
+        if verbose:
+            print(f"  Logged to: {log_file}")
+            print(f"  Archived to: {archive_path}")
+            print(f"  Updated context: {context_file}")
+            for i, result in enumerate(results):
+                print(f"    Ritual {i+1} ({result['name']}): {result['status']}")
+                if result['status'] == 'failed':
+                    print(f"      Error: {result['error']}")
+        
+        return True
+        
+    except Exception as e:
+        print(f"Error processing {yaml_file.name}: {e}")
+        
+        # Still move malformed files to archive so they don't get processed again
+        try:
+            archive_path = archive_processed_file(yaml_file)
+            if verbose:
+                print(f"  Moved malformed file to: {archive_path}")
+        except Exception as archive_error:
+            print(f"  Warning: Could not archive malformed file: {archive_error}")
+        
+        return False
+
+def batch_mode(output_dir, verbose=False):
+    """Run in batch mode - process all existing files once."""
+    if verbose:
+        print("Running in batch mode")
+    
+    # Find and process YAML files
+    yaml_files = find_yaml_files(output_dir)
+    
+    if verbose:
+        print(f"Found {len(yaml_files)} YAML files to process")
+    
+    for yaml_file in yaml_files:
+        process_single_file(yaml_file, verbose)
+    
+    if verbose:
+        print("Batch processing complete")
+
+
 def main():
     """Main entry point for ghostd script."""
     parser = argparse.ArgumentParser(description='ghostd v0.0.1 - Process ritual proposals')
     parser.add_argument('--verbose', '-v', action='store_true', 
                         help='Enable verbose output')
+    parser.add_argument('--watch', '-w', action='store_true',
+                        help='Watch mode: continuously monitor for new files')
+    parser.add_argument('--batch', '-b', action='store_true',
+                        help='Batch mode: process existing files once and exit (default)')
     
     args = parser.parse_args()
+    
+    # Default to batch mode if neither specified
+    if not args.watch and not args.batch:
+        args.batch = True
     
     if args.verbose:
         print("ghostd v0.0.1 starting...")
@@ -331,60 +506,19 @@ def main():
     if args.verbose:
         print("Directory structure validated")
     
-    # Find and process YAML files
     output_dir = ghost_dir / 'output'
-    yaml_files = find_yaml_files(output_dir)
     
-    if args.verbose:
-        print(f"Found {len(yaml_files)} YAML files to process")
-    
-    for yaml_file in yaml_files:
-        if args.verbose:
-            print(f"Processing {yaml_file.name}...")
-        
-        try:
-            proposal = load_ritual_proposal(yaml_file)
+    # Run in appropriate mode
+    if args.watch:
+        success = watch_mode(output_dir, args.verbose)
+        if not success:
+            # Fallback to batch mode if watch fails
             if args.verbose:
-                print(f"  Chain ID: {proposal['chain_id']}")
-                print(f"  Rituals: {len(proposal['rituals'])}")
-            
-            # Execute the rituals
-            results = execute_rituals(proposal['rituals'])
-            
-            # Create and write log entry
-            log_entry = create_log_entry(proposal['chain_id'], proposal, results)
-            log_file = write_log_entry(log_entry)
-            
-            # Move processed file to archive
-            archive_path = archive_processed_file(yaml_file)
-            
-            # Update context with execution summary
-            context_file = update_context(proposal['chain_id'], log_entry['status'], results)
-            
-            if args.verbose:
-                print(f"  Logged to: {log_file}")
-                print(f"  Archived to: {archive_path}")
-                print(f"  Updated context: {context_file}")
-                for i, result in enumerate(results):
-                    print(f"    Ritual {i+1} ({result['name']}): {result['status']}")
-                    if result['status'] == 'failed':
-                        print(f"      Error: {result['error']}")
-                
-        except Exception as e:
-            print(f"Error processing {yaml_file.name}: {e}")
-            
-            # Still move malformed files to archive so they don't get processed again
-            try:
-                archive_path = archive_processed_file(yaml_file)
-                if args.verbose:
-                    print(f"  Moved malformed file to: {archive_path}")
-            except Exception as archive_error:
-                print(f"  Warning: Could not archive malformed file: {archive_error}")
-            
-            continue
-    
-    if args.verbose:
-        print("ghostd processing complete")
+                print("Falling back to batch mode")
+            batch_mode(output_dir, args.verbose)
+    else:
+        # Default to batch mode
+        batch_mode(output_dir, args.verbose)
 
 
 if __name__ == '__main__':

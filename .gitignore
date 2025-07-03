@@ -24,12 +24,27 @@ env/
 # Obsidian
 .obsidian/
 
+# Ignore contents of .ghost subdirectories, but keep the folders
+.ghost/*
+!.ghost/.gitkeep
+!.ghost/context/
+!.ghost/logs/
+!.ghost/output/
+!.ghost/archive/
+!.ghost/daemon/
+
+# Inside each of those subdirs, ignore all files
+.ghost/context/*
+.ghost/logs/*
+.ghost/output/*
+.ghost/archive/*
+.ghost/daemon/*
+
 # Test artifacts
 *.tmp
 *.log
 ghost.tmp
 ghostvault_tree.md
-scratch/
 
 # OS
 .DS_Store
